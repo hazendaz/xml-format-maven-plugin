@@ -26,7 +26,7 @@
     <maven.compiler.release>8</maven.compiler.release>
     <maven.enforcer.java>8</maven.enforcer.java>
     <maven.enforcer.mvn>3.6.3</maven.enforcer.mvn>
-    <mockito.version>5.13.0</mockito.version>
+    <mockito.version>5.14.1</mockito.version>
     <pmd.version>6.55.0</pmd.version>
     <sortpom-plugin.version>4.0.0</sortpom-plugin.version>
     <spotbugs.skip>true</spotbugs.skip>
