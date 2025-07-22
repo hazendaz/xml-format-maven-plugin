@@ -75,7 +75,7 @@
 
         <!-- Libraries -->
         <byte-buddy.version>1.17.6</byte-buddy.version>
-        <dom4j.version>2.1.4</dom4j.version>
+        <dom4j.version>2.2.0</dom4j.version>
         <hamcrest.version>3.0</hamcrest.version>
         <junit.version>5.13.4</junit.version>
         <lang.version>3.18.0</lang.version>
