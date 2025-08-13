@@ -11,7 +11,7 @@ jobs:
 
     steps:
     - name: Check out Git repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     - name: Set up Java and Maven
       uses: actions/setup-java@v4
@@ -37,7 +37,7 @@ jobs:
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Java and Maven
         uses: actions/setup-java@v4
@@ -60,7 +60,7 @@ jobs:
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Java and Maven
         uses: actions/setup-java@v4
@@ -86,7 +86,7 @@ jobs:
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Java and Maven
         uses: actions/setup-java@v4
@@ -109,7 +109,7 @@ jobs:
 
     steps:
     - name: Check out Git repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     - name: Set up Java and Maven
       uses: actions/setup-java@v4
