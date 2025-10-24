@@ -71,7 +71,7 @@
         <javadoc.java.release.version>8</javadoc.java.release.version>
 
         <!-- Plugins -->
-        <maven-plugin.version>3.15.1</maven-plugin.version>
+        <maven-plugin.version>3.15.2</maven-plugin.version>
 
         <!-- Libraries -->
         <byte-buddy.version>1.17.8</byte-buddy.version>
