@@ -78,7 +78,7 @@
         <dom4j.version>2.1.4</dom4j.version>
         <hamcrest.version>3.0</hamcrest.version>
         <junit.version>6.0.1</junit.version>
-        <lang.version>3.19.0</lang.version>
+        <lang.version>3.20.0</lang.version>
         <maven.version>3.9.11</maven.version>
         <mockito.version>5.20.0</mockito.version>
         <plexus-utils.version>4.0.2</plexus-utils.version>
