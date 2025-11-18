@@ -29,7 +29,7 @@
         <relativePath />
     </parent>
 
-    <groupId>au.com.acegi</groupId>
+    <groupId>com.github.hazendaz.maven</groupId>
     <artifactId>xml-format-maven-plugin</artifactId>
     <version>4.1.1-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
