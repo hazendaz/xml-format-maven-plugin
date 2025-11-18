@@ -1,4 +1,4 @@
-[![Java CI](https://github.com/hazendaz/xml-format-maven-plugin/workflows/Maven%20Build%20and%20Deployment/badge.svg)](https://github.com/hazendaz/xml-format-maven-plugin/actions)
+[![Java CI](https://github.com/hazendaz/xml-format-maven-plugin/workflows/Java%20CI/badge.svg)](https://github.com/hazendaz/xml-format-maven-plugin/actions)
 [![Coverage Status](https://codecov.io/gh/hazendaz/xml-format-maven-plugin/branch/master/graph/badge.svg)](https://codecov.io/gh/hazendaz/xml-format-maven-plugin)
 [![Javadocs](http://www.javadoc.io/badge/com.github.hazendaz/xml-format-maven-plugin.svg)](http://www.javadoc.io/doc/com.github.hazendaz/xml-format-maven-plugin)
 [![Maven central](https://maven-badges.herokuapp.com/maven-central/com.github.hazendaz.maven/xml-format-maven-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.hazendaz.maven/xml-format-maven-plugin)
