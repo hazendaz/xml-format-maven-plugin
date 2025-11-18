@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html","k":"18"},{"p":"au.com.acegi.xmlformat","l":"FormatUtilTest"},{"p":"au.com.acegi.xmlformat","l":"IOTest"},{"p":"au.com.acegi.xmlformat","l":"XmlCheckPluginTest"},{"p":"au.com.acegi.xmlformat","l":"XmlFormatPluginTest"}];updateSearchResults();

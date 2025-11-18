@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BlankLinesWriter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">XML Format Maven Plugin</a> &gt; <a href="index.source.html" class="el_package">au.com.acegi.xmlformat</a> &gt; <span class="el_source">BlankLinesWriter.java</span></div><h1>BlankLinesWriter.java</h1><pre class="source lang-java linenums">/*
+ * XML Format Maven Plugin (https://github.com/acegi/xml-format-maven-plugin)
+ *
+ * Copyright 2011-2025 Acegi Technology Pty Limited.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package au.com.acegi.xmlformat;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.StringTokenizer;
+
+import org.apache.commons.lang3.StringUtils;
+import org.dom4j.Node;
+import org.dom4j.io.XMLWriter;
+
+/**
+ * Subclass of {@link XMLWriter} that preserves blank lines in outupt (at most one of them, among two subsequent tags).
+ */
+class BlankLinesWriter extends XMLWriter {
+
+    BlankLinesWriter(final OutputStream out, final XmlOutputFormat fmt) throws UnsupportedEncodingException {
+<span class="fc" id="L35">        super(out, fmt);</span>
+<span class="fc" id="L36">    }</span>
+
+    @Override
+    protected void writeString(final String text) throws IOException {
+<span class="pc bpc" id="L40" title="2 of 4 branches missed.">        if (text == null || text.length() == 0) {</span>
+<span class="nc" id="L41">            return;</span>
+        }
+
+<span class="fc" id="L44">        String input = text;</span>
+<span class="pc bpc" id="L45" title="1 of 2 branches missed.">        if (isEscapeText()) {</span>
+<span class="fc" id="L46">            input = escapeElementEntities(text);</span>
+        }
+
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">        if (getOutputFormat().isTrimText()) {</span>
+<span class="fc" id="L50">            boolean first = true;</span>
+<span class="fc" id="L51">            final StringTokenizer tokenizer = new StringTokenizer(input, &quot; \t\r\f&quot;);</span>
+
+<span class="fc" id="L53">            final NewLinesHandler newLinesHandler = new NewLinesHandler();</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">            while (tokenizer.hasMoreTokens()) {</span>
+<span class="fc" id="L55">                final String token = tokenizer.nextToken();</span>
+
+                // Only if more tokens exist, continue
+<span class="fc bfc" id="L58" title="All 2 branches covered.">                if (newLinesHandler.processToken(token, tokenizer.hasMoreTokens())) {</span>
+<span class="fc" id="L59">                    continue;</span>
+                }
+
+<span class="fc bfc" id="L62" title="All 2 branches covered.">                if (first) {</span>
+<span class="fc" id="L63">                    first = false;</span>
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">                    if (lastOutputNodeType == Node.TEXT_NODE) {</span>
+<span class="nc" id="L65">                        writer.write(&quot; &quot;);</span>
+                    }
+                } else {
+<span class="fc" id="L68">                    writer.write(&quot; &quot;);</span>
+                }
+
+<span class="fc" id="L71">                writer.write(token.trim());</span>
+<span class="fc" id="L72">                lastOutputNodeType = Node.TEXT_NODE;</span>
+<span class="fc" id="L73">            }</span>
+<span class="fc" id="L74">            newLinesHandler.finished();</span>
+<span class="fc" id="L75">        } else {</span>
+<span class="nc" id="L76">            lastOutputNodeType = Node.TEXT_NODE;</span>
+<span class="nc" id="L77">            writer.write(input);</span>
+        }
+<span class="fc" id="L79">    }</span>
+
+<span class="fc" id="L81">    private final class NewLinesHandler {</span>
+        private int newLinesCount;
+
+        /**
+         * Processes the token, counting the newlines and producing at most one in output.
+         *
+         * @param token
+         *            The token to be written
+         * @param hasMoreTokens
+         *            Does more tokens exist
+         *
+         * @return True if the token needs to be skipped (it's a newline or a set of newlines)
+         *
+         * @throws IOException
+         *             If an I/O error occurs.
+         */
+        private boolean processToken(final String token, final boolean hasMoreTokens) throws IOException {
+<span class="fc" id="L98">            final int tokenNewLines = StringUtils.countMatches(token, '\n');</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">            if (tokenNewLines &gt; 0) {</span>
+<span class="fc" id="L100">                newLinesCount += tokenNewLines;</span>
+<span class="fc" id="L101">                return hasMoreTokens;</span>
+            }
+<span class="pc bpc" id="L103" title="1 of 2 branches missed.">            if (newLinesCount &gt; 1) {</span>
+<span class="nc" id="L104">                writer.write(&quot;\n&quot;);</span>
+<span class="nc" id="L105">                newLinesCount = 0;</span>
+            }
+<span class="fc" id="L107">            return false;</span>
+        }
+
+        /**
+         * Marks the end of token streams, allows to emit a last newlines if the last tokens were all newlines.
+         *
+         * @throws IOException
+         *             If an I/O error occurs.
+         */
+        private void finished() throws IOException {
+<span class="fc bfc" id="L117" title="All 2 branches covered.">            if (newLinesCount &gt; 1) {</span>
+<span class="fc" id="L118">                writer.write(&quot;\n&quot;);</span>
+            }
+<span class="fc" id="L120">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

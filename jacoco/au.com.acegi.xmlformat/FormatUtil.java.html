@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FormatUtil.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">XML Format Maven Plugin</a> &gt; <a href="index.source.html" class="el_package">au.com.acegi.xmlformat</a> &gt; <span class="el_source">FormatUtil.java</span></div><h1>FormatUtil.java</h1><pre class="source lang-java linenums">/*
+ * XML Format Maven Plugin (https://github.com/acegi/xml-format-maven-plugin)
+ *
+ * Copyright 2011-2025 Acegi Technology Pty Limited.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package au.com.acegi.xmlformat;
+
+import static java.io.File.createTempFile;
+import static java.nio.file.Files.copy;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+
+import static au.com.acegi.xmlformat.IOUtil.hash;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.io.SAXReader;
+import org.dom4j.io.XMLWriter;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
+/**
+ * Utility methods private to the package.
+ */
+final class FormatUtil {
+
+<span class="fc" id="L48">    private static final String TMP_FILE_PREFIX = FormatUtil.class.getSimpleName();</span>
+
+    private FormatUtil() {
+    }
+
+    /**
+     * Ingest an input stream, writing formatted XML to the output stream. The caller is responsible for closing the
+     * input and output streams. Any errors in the input stream will cause an exception and the output stream should not
+     * be relied upon.
+     *
+     * @param in
+     *            input XML stream
+     * @param out
+     *            output XML stream
+     * @param fmt
+     *            format configuration to apply
+     *
+     * @throws DocumentException
+     *             if input XML could not be parsed
+     * @throws IOException
+     *             if output XML stream could not be written
+     */
+    static void format(final InputStream in, final OutputStream out, final XmlOutputFormat fmt)
+            throws DocumentException, IOException {
+<span class="fc" id="L72">        final SAXReader reader = new SAXReader();</span>
+<span class="fc" id="L73">        reader.setEntityResolver(new EntityResolver() {</span>
+            @Override
+            public InputSource resolveEntity(final String publicId, final String systemId)
+                    throws SAXException, IOException {
+<span class="nc" id="L77">                return new InputSource(new StringReader(&quot;&quot;));</span>
+            }
+        });
+<span class="fc" id="L80">        final Document xmlDoc = reader.read(in);</span>
+
+<span class="fc" id="L82">        final XMLWriter xmlWriter = getXmlWriter(out, fmt);</span>
+<span class="fc" id="L83">        xmlWriter.write(xmlDoc);</span>
+<span class="fc" id="L84">        xmlWriter.flush();</span>
+<span class="fc" id="L85">    }</span>
+
+    private static XMLWriter getXmlWriter(final OutputStream out, final XmlOutputFormat fmt)
+            throws UnsupportedEncodingException {
+        final XMLWriter xmlWriter;
+<span class="fc bfc" id="L90" title="All 2 branches covered.">        if (fmt.isKeepBlankLines()) {</span>
+<span class="fc" id="L91">            xmlWriter = new BlankLinesWriter(out, fmt);</span>
+        } else {
+<span class="fc" id="L93">            xmlWriter = new XMLWriter(out, fmt);</span>
+        }
+<span class="fc" id="L95">        return xmlWriter;</span>
+    }
+
+    /**
+     * Formats the input file, overwriting the input file with the new content if the formatted content differs.
+     *
+     * @param file
+     *            to read and then potentially overwrite
+     * @param fmt
+     *            format configuration to apply
+     *
+     * @return true if the file was overwritten
+     *
+     * @throws DocumentException
+     *             if input XML could not be parsed
+     * @throws IOException
+     *             if output XML stream could not be written
+     */
+    static boolean formatInPlace(final File file, final XmlOutputFormat fmt) throws DocumentException, IOException {
+<span class="fc bfc" id="L114" title="All 2 branches covered.">        if (file.length() == 0) {</span>
+<span class="fc" id="L115">            return false;</span>
+        }
+
+<span class="fc" id="L118">        final File tmpFile = createTempFile(TMP_FILE_PREFIX, &quot;.xml&quot;);</span>
+<span class="fc" id="L119">        tmpFile.deleteOnExit();</span>
+
+<span class="fc" id="L121">        try (InputStream in = Files.newInputStream(file.toPath());</span>
+<span class="fc" id="L122">                OutputStream out = Files.newOutputStream(tmpFile.toPath())) {</span>
+<span class="fc" id="L123">            format(in, out, fmt);</span>
+        }
+
+<span class="fc" id="L126">        final long hashFile = hash(file);</span>
+<span class="fc" id="L127">        final long hashTmp = hash(tmpFile);</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        if (hashFile == hashTmp) {</span>
+<span class="fc" id="L129">            return false;</span>
+        }
+
+<span class="fc" id="L132">        final Path source = tmpFile.toPath();</span>
+<span class="fc" id="L133">        final Path target = file.toPath();</span>
+<span class="fc" id="L134">        copy(source, target, REPLACE_EXISTING);</span>
+<span class="fc" id="L135">        return true;</span>
+    }
+
+    /**
+     * Only checks if the input file would be modified by the formatter, without overwriting it.
+     *
+     * @param file
+     *            to read
+     * @param fmt
+     *            format configuration to apply
+     *
+     * @return true if the file would be modified by the formatter
+     *
+     * @throws DocumentException
+     *             if input XML could not be parsed
+     * @throws IOException
+     *             if output XML stream could not be written
+     */
+    static boolean needsFormatting(final File file, final XmlOutputFormat fmt) throws DocumentException, IOException {
+<span class="fc bfc" id="L154" title="All 2 branches covered.">        if (file.length() == 0) {</span>
+<span class="fc" id="L155">            return false;</span>
+        }
+
+<span class="fc" id="L158">        final File tmpFile = createTempFile(TMP_FILE_PREFIX, &quot;.xml&quot;);</span>
+<span class="fc" id="L159">        tmpFile.deleteOnExit();</span>
+
+<span class="fc" id="L161">        try (InputStream in = Files.newInputStream(file.toPath());</span>
+<span class="fc" id="L162">                OutputStream out = Files.newOutputStream(tmpFile.toPath())) {</span>
+<span class="fc" id="L163">            format(in, out, fmt);</span>
+        }
+
+<span class="fc" id="L166">        final long hashFile = hash(file);</span>
+<span class="fc" id="L167">        final long hashTmp = hash(tmpFile);</span>
+<span class="pc bpc" id="L168" title="1 of 2 branches missed.">        return hashFile != hashTmp;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

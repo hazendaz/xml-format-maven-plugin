@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AbstractXmlPlugin.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">XML Format Maven Plugin</a> &gt; <a href="index.source.html" class="el_package">au.com.acegi.xmlformat</a> &gt; <span class="el_source">AbstractXmlPlugin.java</span></div><h1>AbstractXmlPlugin.java</h1><pre class="source lang-java linenums">/*
+ * XML Format Maven Plugin (https://github.com/acegi/xml-format-maven-plugin)
+ *
+ * Copyright 2011-2025 Acegi Technology Pty Limited.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package au.com.acegi.xmlformat;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.codehaus.plexus.util.DirectoryScanner;
+import org.dom4j.DocumentException;
+
+/**
+ * Common infrastructure for the various plugin goals.
+ */
+<span class="fc" id="L36">@SuppressWarnings(&quot;DesignForExtension&quot;)</span>
+<span class="fc" id="L37">public abstract class AbstractXmlPlugin extends AbstractMojo {</span>
+
+    /**
+     * Quote character to use when writing attributes.
+     */
+<span class="fc" id="L42">    @Parameter(property = &quot;attributeQuoteChar&quot;, defaultValue = &quot;\&quot;&quot;)</span>
+    @SuppressWarnings(&quot;PMD.ImmutableField&quot;)
+    private char attributeQuoteChar = '&quot;';
+
+    /**
+     * The base directory of the project.
+     */
+    @Parameter(defaultValue = &quot;.&quot;, readonly = true, required = true, property = &quot;project.basedir&quot;)
+    private File baseDirectory;
+
+    /**
+     * The encoding format.
+     */
+<span class="fc" id="L55">    @Parameter(property = &quot;encoding&quot;, defaultValue = &quot;UTF-8&quot;)</span>
+    @SuppressWarnings(&quot;PMD.ImmutableField&quot;)
+    private String encoding = &quot;UTF-8&quot;;
+
+    /**
+     * A set of file patterns that allow you to exclude certain files/folders from the formatting. In addition to these
+     * exclusions, the project build directory (typically &lt;code&gt;target&lt;/code&gt;) is always excluded if skipTargetFolder is
+     * true.
+     */
+    @Parameter(property = &quot;excludes&quot;)
+    private String[] excludes;
+
+    /**
+     * Whether or not to expand empty elements to &amp;lt;tagName&amp;gt;&amp;lt;/tagName&amp;gt;.
+     */
+    @Parameter(property = &quot;expandEmptyElements&quot;, defaultValue = &quot;false&quot;)
+    private boolean expandEmptyElements;
+
+    /**
+     * A set of file patterns that dictate which files should be included in the formatting with each file pattern being
+     * relative to the base directory.
+     */
+    @Parameter(property = &quot;includes&quot;)
+    private String[] includes;
+
+    /**
+     * Indicates the number of spaces to apply when indenting.
+     */
+    @Parameter(property = &quot;indentSize&quot;, defaultValue = &quot;2&quot;)
+    private int indentSize;
+
+    /**
+     * Use tabs instead of spaces for indents. If set to &lt;code&gt;true&lt;/code&gt;, &lt;code&gt;indentSize&lt;/code&gt; will be ignored.
+     */
+    @Parameter(property = &quot;tabIndent&quot;, defaultValue = &quot;false&quot;)
+    private boolean tabIndent;
+
+    /**
+     * Sets the line-ending of files after formatting. Valid values are:
+     * &lt;ul&gt;
+     * &lt;li&gt;&lt;b&gt;&quot;SYSTEM&quot;&lt;/b&gt; - Use line endings of current system&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;&quot;LF&quot;&lt;/b&gt; - Use Unix and Mac style line endings&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;&quot;CRLF&quot;&lt;/b&gt; - Use DOS and Windows style line endings&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;&quot;CR&quot;&lt;/b&gt; - Use early Mac style line endings&lt;/li&gt;
+     * &lt;/ul&gt;
+     * This property is only used if {@link #lineSeparator} has its default value. Do not set any value for
+     * {@link #lineSeparator}.
+     */
+<span class="fc" id="L103">    @Parameter(property = &quot;lineEnding&quot;, defaultValue = &quot;LF&quot;)</span>
+    @SuppressWarnings(&quot;PMD.ImmutableField&quot;)
+    private LineEnding lineEnding = LineEnding.LF;
+
+    /**
+     * New line separator.
+     *
+     * @deprecated Please do not set this value; use {@link #lineEnding} instead
+     */
+<span class="fc" id="L112">    @Parameter(property = &quot;lineSeparator&quot;, defaultValue = &quot;\n&quot;)</span>
+    @SuppressWarnings(&quot;PMD.ImmutableField&quot;)
+    @Deprecated
+    private String lineSeparator = &quot;\n&quot;;
+
+    /**
+     * Whether or not to print new line after the XML declaration.
+     */
+    @Parameter(property = &quot;newLineAfterDeclaration&quot;, defaultValue = &quot;false&quot;)
+    private boolean newLineAfterDeclaration;
+
+    /**
+     * Controls when to output a line.separator every so many tags in case of no lines and total text trimming.
+     */
+    @Parameter(property = &quot;newLineAfterNTags&quot;, defaultValue = &quot;0&quot;)
+    private int newLineAfterNTags;
+
+    /**
+     * The default new line flag, set to do new lines only as in original document.
+     */
+    @Parameter(property = &quot;newlines&quot;, defaultValue = &quot;true&quot;)
+    private boolean newlines;
+
+    /**
+     * Whether or not to output the encoding in the XML declaration.
+     */
+    @Parameter(property = &quot;omitEncoding&quot;, defaultValue = &quot;false&quot;)
+    private boolean omitEncoding;
+
+    /**
+     * Pad string-element boundaries with whitespace.
+     */
+    @Parameter(property = &quot;padText&quot;, defaultValue = &quot;false&quot;)
+    private boolean padText;
+
+    /**
+     * Skip XML formatting.
+     */
+    @Parameter(property = &quot;xml-format.skip&quot;, defaultValue = &quot;false&quot;)
+    private boolean skip;
+
+    /**
+     * In addition to the exclusions, the project build directory (typically &lt;code&gt;target&lt;/code&gt;) is always excluded if
+     * true.
+     */
+<span class="fc" id="L157">    @Parameter(property = &quot;skipTargetFolder&quot;, defaultValue = &quot;true&quot;)</span>
+    private boolean skipTargetFolder = true;
+
+    /**
+     * Whether or not to suppress the XML declaration.
+     */
+    @Parameter(property = &quot;suppressDeclaration&quot;, defaultValue = &quot;false&quot;)
+    private boolean suppressDeclaration;
+
+    /**
+     * The project target directory. This is always excluded from formatting.
+     */
+    @Parameter(defaultValue = &quot;${project.build.directory}&quot;, readonly = true, required = true)
+    private File targetDirectory;
+
+    /**
+     * Should we preserve whitespace or not in text nodes.
+     */
+    @Parameter(property = &quot;trimText&quot;, defaultValue = &quot;true&quot;)
+    private boolean trimText;
+
+    /**
+     * Whether or not to use XHTML standard.
+     */
+    @Parameter(property = &quot;xhtml&quot;, defaultValue = &quot;false&quot;)
+    private boolean xhtml;
+
+    /**
+     * Whether to keep blank lines. A maximum of one line is preserved between each tag.
+     */
+    @Parameter(property = &quot;keepBlankLines&quot;, defaultValue = &quot;false&quot;)
+    private boolean keepBlankLines;
+
+    @Override
+    public void execute() throws MojoExecutionException, MojoFailureException {
+<span class="pc bpc" id="L192" title="1 of 2 branches missed.">        assert baseDirectory != null;</span>
+<span class="pc bpc" id="L193" title="1 of 2 branches missed.">        assert targetDirectory != null;</span>
+
+<span class="fc bfc" id="L195" title="All 2 branches covered.">        if (skip) {</span>
+<span class="fc" id="L196">            getLog().info(&quot;[xml-format] Skipped&quot;);</span>
+<span class="fc" id="L197">            return;</span>
+        }
+
+<span class="fc" id="L200">        initializeIncludes();</span>
+<span class="fc" id="L201">        initializeExcludes();</span>
+
+<span class="fc" id="L203">        final XmlOutputFormat fmt = buildFormatter();</span>
+
+<span class="fc" id="L205">        boolean success = true;</span>
+<span class="fc" id="L206">        boolean neededFormatting = false;</span>
+<span class="fc bfc" id="L207" title="All 2 branches covered.">        for (final String inputName : find()) {</span>
+<span class="fc" id="L208">            final File input = new File(baseDirectory, inputName);</span>
+            try {
+<span class="fc" id="L210">                neededFormatting |= processFile(input, fmt);</span>
+<span class="fc" id="L211">            } catch (final DocumentException | IOException ex) {</span>
+<span class="fc" id="L212">                success = false;</span>
+<span class="fc" id="L213">                getLog().error(&quot;[xml-format] Error for &quot; + input, ex);</span>
+<span class="fc" id="L214">            }</span>
+        }
+
+<span class="fc bfc" id="L217" title="All 2 branches covered.">        if (!success) {</span>
+<span class="fc" id="L218">            throw new MojoFailureException(&quot;[xml-format] Failed)&quot;);</span>
+        }
+<span class="fc" id="L220">        afterAllProcessed(neededFormatting);</span>
+<span class="fc" id="L221">    }</span>
+
+    /**
+     * Processes a single file found in the project.
+     *
+     * @param input
+     *            the file to process
+     * @param fmt
+     *            the formatting options
+     *
+     * @return true if the file required changes to match the formatting style
+     *
+     * @throws DocumentException
+     *             if input XML could not be parsed
+     * @throws IOException
+     *             if output XML stream could not be written
+     */
+    protected abstract boolean processFile(File input, XmlOutputFormat fmt) throws DocumentException, IOException;
+
+    /**
+     * Invoked after all files in the project have been processed.
+     *
+     * @param neededFormatting
+     *            whether any processed file required changes to match the formatting style
+     *
+     * @throws MojoExecutionException
+     *             if the build must be failed
+     */
+    protected abstract void afterAllProcessed(boolean neededFormatting) throws MojoExecutionException;
+
+    void setBaseDirectory(final File baseDirectory) {
+<span class="fc" id="L252">        this.baseDirectory = baseDirectory;</span>
+<span class="fc" id="L253">    }</span>
+
+    void setExcludes(final String... excludes) {
+<span class="pc bpc" id="L256" title="1 of 2 branches missed.">        this.excludes = excludes == null ? null : Arrays.copyOf(excludes, excludes.length);</span>
+<span class="fc" id="L257">    }</span>
+
+    void setIncludes(final String... includes) {
+<span class="pc bpc" id="L260" title="1 of 2 branches missed.">        this.includes = includes == null ? null : Arrays.copyOf(includes, includes.length);</span>
+<span class="fc" id="L261">    }</span>
+
+    void setSkip(final boolean skip) {
+<span class="fc" id="L264">        this.skip = skip;</span>
+<span class="fc" id="L265">    }</span>
+
+    void setSkipTargetFolder(final boolean skipTargetFolder) {
+<span class="fc" id="L268">        this.skipTargetFolder = skipTargetFolder;</span>
+<span class="fc" id="L269">    }</span>
+
+    void setTargetDirectory(final File targetDirectory) {
+<span class="fc" id="L272">        this.targetDirectory = targetDirectory;</span>
+<span class="fc" id="L273">    }</span>
+
+    private XmlOutputFormat buildFormatter() {
+<span class="fc" id="L276">        final XmlOutputFormat fmt = new XmlOutputFormat();</span>
+<span class="fc" id="L277">        fmt.setAttributeQuoteCharacter(attributeQuoteChar);</span>
+<span class="fc" id="L278">        fmt.setEncoding(encoding);</span>
+<span class="fc" id="L279">        fmt.setExpandEmptyElements(expandEmptyElements);</span>
+<span class="pc bpc" id="L280" title="1 of 2 branches missed.">        if (tabIndent) {</span>
+<span class="nc" id="L281">            fmt.setIndent(&quot;\t&quot;);</span>
+        } else {
+<span class="fc" id="L283">            fmt.setIndentSize(indentSize);</span>
+        }
+<span class="fc" id="L285">        fmt.setLineSeparator(determineLineSeparator());</span>
+<span class="fc" id="L286">        fmt.setNewLineAfterDeclaration(newLineAfterDeclaration);</span>
+<span class="fc" id="L287">        fmt.setNewLineAfterNTags(newLineAfterNTags);</span>
+<span class="fc" id="L288">        fmt.setNewlines(newlines);</span>
+<span class="fc" id="L289">        fmt.setOmitEncoding(omitEncoding);</span>
+<span class="fc" id="L290">        fmt.setPadText(padText);</span>
+<span class="fc" id="L291">        fmt.setSuppressDeclaration(suppressDeclaration);</span>
+<span class="fc" id="L292">        fmt.setTrimText(trimText);</span>
+<span class="fc" id="L293">        fmt.setXHTML(xhtml);</span>
+<span class="fc" id="L294">        fmt.setKeepBlankLines(keepBlankLines);</span>
+<span class="fc" id="L295">        return fmt;</span>
+    }
+
+    private String determineLineSeparator() {
+<span class="pc bpc" id="L299" title="1 of 2 branches missed.">        return &quot;\n&quot;.equals(lineSeparator) ? lineEnding.getChars() : lineSeparator;</span>
+    }
+
+    private String[] find() {
+<span class="fc" id="L303">        final DirectoryScanner dirScanner = new DirectoryScanner();</span>
+<span class="fc" id="L304">        dirScanner.setBasedir(baseDirectory);</span>
+<span class="fc" id="L305">        dirScanner.setIncludes(includes);</span>
+
+<span class="fc" id="L307">        final List&lt;String&gt; exclude = new ArrayList&lt;&gt;(Arrays.asList(excludes));</span>
+<span class="pc bpc" id="L308" title="1 of 4 branches missed.">        if (skipTargetFolder &amp;&amp; baseDirectory.equals(targetDirectory.getParentFile())) {</span>
+<span class="fc" id="L309">            exclude.add(targetDirectory.getName() + &quot;/**&quot;);</span>
+        }
+<span class="fc" id="L311">        final String[] excluded = new String[exclude.size()];</span>
+<span class="fc" id="L312">        dirScanner.setExcludes(exclude.toArray(excluded));</span>
+
+<span class="fc" id="L314">        dirScanner.scan();</span>
+<span class="fc" id="L315">        return dirScanner.getIncludedFiles();</span>
+    }
+
+    private void initializeExcludes() {
+<span class="pc bpc" id="L319" title="1 of 4 branches missed.">        if (excludes == null || excludes.length == 0) {</span>
+<span class="fc" id="L320">            excludes = new String[0];</span>
+        }
+<span class="fc" id="L322">    }</span>
+
+    private void initializeIncludes() {
+<span class="pc bpc" id="L325" title="2 of 4 branches missed.">        if (includes == null || includes.length == 0) {</span>
+<span class="nc" id="L326">            includes = new String[] { &quot;**/*.xml&quot; };</span>
+        }
+<span class="fc" id="L328">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>
