@@ -1,7 +1,6 @@
 [![Java CI](https://github.com/hazendaz/xml-format-maven-plugin/workflows/Java%20CI/badge.svg)](https://github.com/hazendaz/xml-format-maven-plugin/actions)
-[![Coverage Status](https://codecov.io/gh/hazendaz/xml-format-maven-plugin/branch/master/graph/badge.svg)](https://codecov.io/gh/hazendaz/xml-format-maven-plugin)
-[![Javadocs](http://www.javadoc.io/badge/com.github.hazendaz/xml-format-maven-plugin.svg)](http://www.javadoc.io/doc/com.github.hazendaz/xml-format-maven-plugin)
-[![Maven central](https://maven-badges.herokuapp.com/maven-central/com.github.hazendaz.maven/xml-format-maven-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.hazendaz.maven/xml-format-maven-plugin)
+[![Coveralls](https://coveralls.io/repos/github/hazendaz/xml-format-maven-plugin/badge.svg?branch=master)](https://coveralls.io/github/hazendaz/xml-format-maven-plugin?branch=master)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.hazendaz.maven/xml-format-maven-plugin)](https://maven-badges.herokuapp.com/maven-central/com.github.hazendaz.maven/xml-format-maven-plugin)
 [![Apache 2](http://img.shields.io/badge/license-Apache%202-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
 # XML Format Maven Plugin
