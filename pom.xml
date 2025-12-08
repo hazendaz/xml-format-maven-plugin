@@ -82,7 +82,6 @@
         <maven.version>3.9.11</maven.version>
         <mockito.version>5.20.0</mockito.version>
         <plexus-utils.version>4.0.2</plexus-utils.version>
-        <spotbugs.version note="maintain java 8 compatibiilty">4.8.6</spotbugs.version>
 
         <!-- Keep formatters generaly off, use only selectively to cleanup formatting of source files -->
         <formatter.skip>true</formatter.skip>
