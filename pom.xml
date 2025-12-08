@@ -66,9 +66,9 @@
 
     <properties>
         <!-- Java Runtime Requirements -->
-        <java.version>8</java.version>
-        <java.release.version>8</java.release.version>
-        <javadoc.java.release.version>8</javadoc.java.release.version>
+        <java.version>11</java.version>
+        <java.release.version>11</java.release.version>
+        <javadoc.java.release.version>11</javadoc.java.release.version>
 
         <!-- Plugins -->
         <maven-plugin.version>3.15.2</maven-plugin.version>
