@@ -65,19 +65,19 @@ public class XmlCheckPluginTest {
     @BeforeEach
     void before() throws IOException {
         proj = newFolder(tmp, "junit");
-        target = new File(proj, "target");
+        target = proj.toPath().resolve("target").toFile();
         assertThat(target.mkdir(), is(true));
 
-        final File toChange = new File(proj, TO_CHG_FILE_NAME);
+        final File toChange = proj.toPath().resolve(TO_CHG_FILE_NAME).toFile();
         stringToFile(TO_CHG_TXT, toChange);
 
-        final File noChange = new File(target, "exclude-me.xml");
+        final File noChange = target.toPath().resolve("exclude-me.xml").toFile();
         stringToFile(NO_CHG_TXT, noChange);
 
-        final File empty = new File(proj, EMPTY_FILE_NAME);
+        final File empty = proj.toPath().resolve(EMPTY_FILE_NAME).toFile();
         stringToFile(EMPTY_TXT, empty);
 
-        final File error = new File(proj, ERR_FILE_NAME);
+        final File error = proj.toPath().resolve(ERR_FILE_NAME).toFile();
         stringToFile(ERR_TXT, error);
 
         assertThat(fileToString(toChange), is(TO_CHG_TXT));
@@ -154,7 +154,7 @@ public class XmlCheckPluginTest {
 
     private static File newFolder(final File root, final String... subDirs) throws IOException {
         final String subFolder = String.join("/", subDirs);
-        final File result = new File(root, subFolder);
+        final File result = root.toPath().resolve(subFolder).toFile();
         if (!result.mkdirs()) {
             throw new IOException("Couldn't create folders " + root);
         }

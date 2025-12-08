@@ -91,9 +91,6 @@
         <whitespace.skip>true</whitespace.skip>
         <xml-format.skip>true</xml-format.skip>
 
-        <!-- Skip modernizer until we upgrade to supported jdk -->
-        <modernizer.skip>true</modernizer.skip>
-
         <!-- Surefire Setup -->
         <argLine>-javaagent:${settings.localRepository}/net/bytebuddy/byte-buddy-agent/${byte-buddy.version}/byte-buddy-agent-${byte-buddy.version}.jar</argLine>
 

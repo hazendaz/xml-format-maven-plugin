@@ -205,7 +205,7 @@ public abstract class AbstractXmlPlugin extends AbstractMojo {
         boolean success = true;
         boolean neededFormatting = false;
         for (final String inputName : find()) {
-            final File input = new File(baseDirectory, inputName);
+            final File input = baseDirectory.toPath().resolve(inputName).toFile();
             try {
                 neededFormatting |= processFile(input, fmt);
             } catch (final DocumentException | IOException ex) {

@@ -68,19 +68,19 @@ public class XmlFormatPluginTest {
     @BeforeEach
     void before() throws IOException {
         proj = newFolder(tmp, "junit");
-        target = new File(proj, "target");
+        target = proj.toPath().resolve("target").toFile();
         assertThat(target.mkdir(), is(true));
 
-        toChange = new File(proj, "my.xml");
+        toChange = proj.toPath().resolve("my.xml").toFile();
         stringToFile(TO_CHG_TXT, toChange);
 
-        noChange = new File(target, "exclude-me.xml");
+        noChange = target.toPath().resolve("exclude-me.xml").toFile();
         stringToFile(NO_CHG_TXT, noChange);
 
-        final File empty = new File(proj, EMPTY_FILE_NAME);
+        final File empty = proj.toPath().resolve(EMPTY_FILE_NAME).toFile();
         stringToFile(EMPTY_TXT, empty);
 
-        error = new File(proj, ERR_FILE_NAME);
+        error = proj.toPath().resolve(ERR_FILE_NAME).toFile();
         stringToFile(ERR_TXT, error);
 
         assertThat(fileToString(toChange), is(TO_CHG_TXT));
@@ -186,7 +186,7 @@ public class XmlFormatPluginTest {
 
     private static File newFolder(final File root, final String... subDirs) throws IOException {
         final String subFolder = String.join("/", subDirs);
-        final File result = new File(root, subFolder);
+        final File result = root.toPath().resolve(subFolder).toFile();
         if (!result.mkdirs()) {
             throw new IOException("Couldn't create folders " + root);
         }
