@@ -97,6 +97,12 @@
 
         <!-- Surefire Setup -->
         <argLine>-javaagent:${settings.localRepository}/net/bytebuddy/byte-buddy-agent/${byte-buddy.version}/byte-buddy-agent-${byte-buddy.version}.jar</argLine>
+
+        <!-- Automatic Module Name -->
+        <module.name>com.github.hazendaz.maven.xmlformat</module.name>
+
+        <!-- Reproducible Builds -->
+        <project.build.outputTimestamp>1765146692</project.build.outputTimestamp>
     </properties>
 
     <dependencies>
