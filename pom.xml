@@ -34,7 +34,7 @@
     <version>4.1.2-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
-    <name>XML Format Maven Plugin</name>
+    <name>xml-format-maven-plugin</name>
     <description>Automatically formats XML files in a project.</description>
     <inceptionYear>2011</inceptionYear>
 
