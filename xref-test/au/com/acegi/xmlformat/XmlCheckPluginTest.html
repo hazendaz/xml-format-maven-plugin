@@ -73,19 +73,19 @@
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>      @BeforeEach
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>      <strong class="jxr_keyword">void</strong> before() <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>          proj = newFolder(tmp, <span class="jxr_string">"junit"</span>);
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>          target = <strong class="jxr_keyword">new</strong> File(proj, <span class="jxr_string">"target"</span>);
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>          target = proj.toPath().resolve(<span class="jxr_string">"target"</span>).toFile();
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>          assertThat(target.mkdir(), is(<strong class="jxr_keyword">true</strong>));
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>          <strong class="jxr_keyword">final</strong> File toChange = <strong class="jxr_keyword">new</strong> File(proj, TO_CHG_FILE_NAME);
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>          <strong class="jxr_keyword">final</strong> File toChange = proj.toPath().resolve(TO_CHG_FILE_NAME).toFile();
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>          stringToFile(TO_CHG_TXT, toChange);
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>          <strong class="jxr_keyword">final</strong> File noChange = <strong class="jxr_keyword">new</strong> File(target, <span class="jxr_string">"exclude-me.xml"</span>);
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>          <strong class="jxr_keyword">final</strong> File noChange = target.toPath().resolve(<span class="jxr_string">"exclude-me.xml"</span>).toFile();
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>          stringToFile(NO_CHG_TXT, noChange);
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>          <strong class="jxr_keyword">final</strong> File empty = <strong class="jxr_keyword">new</strong> File(proj, EMPTY_FILE_NAME);
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>          <strong class="jxr_keyword">final</strong> File empty = proj.toPath().resolve(EMPTY_FILE_NAME).toFile();
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>          stringToFile(EMPTY_TXT, empty);
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>          <strong class="jxr_keyword">final</strong> File error = <strong class="jxr_keyword">new</strong> File(proj, ERR_FILE_NAME);
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>          <strong class="jxr_keyword">final</strong> File error = proj.toPath().resolve(ERR_FILE_NAME).toFile();
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>          stringToFile(ERR_TXT, error);
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>          assertThat(fileToString(toChange), is(TO_CHG_TXT));
@@ -162,7 +162,7 @@
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 
 <a class="jxr_linenumber" name="L155" href="#L155">155</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> File newFolder(<strong class="jxr_keyword">final</strong> File root, <strong class="jxr_keyword">final</strong> String... subDirs) <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L156" href="#L156">156</a>         <strong class="jxr_keyword">final</strong> String subFolder = String.join(<span class="jxr_string">"/"</span>, subDirs);
-<a class="jxr_linenumber" name="L157" href="#L157">157</a>         <strong class="jxr_keyword">final</strong> File result = <strong class="jxr_keyword">new</strong> File(root, subFolder);
+<a class="jxr_linenumber" name="L157" href="#L157">157</a>         <strong class="jxr_keyword">final</strong> File result = root.toPath().resolve(subFolder).toFile();
 <a class="jxr_linenumber" name="L158" href="#L158">158</a>         <strong class="jxr_keyword">if</strong> (!result.mkdirs()) {
 <a class="jxr_linenumber" name="L159" href="#L159">159</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Couldn't create folders "</span> + root);
 <a class="jxr_linenumber" name="L160" href="#L160">160</a>         }
