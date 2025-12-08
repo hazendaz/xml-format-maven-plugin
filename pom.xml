@@ -31,7 +31,7 @@
 
     <groupId>com.github.hazendaz.maven</groupId>
     <artifactId>xml-format-maven-plugin</artifactId>
-    <version>4.1.2-SNAPSHOT</version>
+    <version>4.2.0</version>
     <packaging>maven-plugin</packaging>
 
     <name>xml-format-maven-plugin</name>
@@ -45,7 +45,7 @@
     <scm>
         <connection>scm:git:ssh://github.com/acegi/xml-format-maven-plugin.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/acegi/xml-format-maven-plugin.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>xml-format-maven-plugin-4.2.0</tag>
         <url>https://github.com/acegi/xml-format-maven-plugin</url>
     </scm>
     <issueManagement>
@@ -98,7 +98,7 @@
         <module.name>com.github.hazendaz.maven.xmlformat</module.name>
 
         <!-- Reproducible Builds -->
-        <project.build.outputTimestamp>1765146692</project.build.outputTimestamp>
+        <project.build.outputTimestamp>1765155881</project.build.outputTimestamp>
     </properties>
 
     <dependencies>
