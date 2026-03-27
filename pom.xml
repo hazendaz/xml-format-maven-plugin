@@ -81,7 +81,7 @@
         <lang.version>3.20.0</lang.version>
         <maven.version>3.9.14</maven.version>
         <mockito.version>5.23.0</mockito.version>
-        <plexus-utils.version>4.0.2</plexus-utils.version>
+        <plexus-utils.version>4.0.3</plexus-utils.version>
 
         <!-- Keep formatters generaly off, use only selectively to cleanup formatting of source files -->
         <formatter.skip>true</formatter.skip>
