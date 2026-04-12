@@ -18,19 +18,9 @@
     limitations under the License.
 
 -->
-
-<lifecycleMappingMetadata>
-  <pluginExecutions>
-    <pluginExecution>
-      <pluginExecutionFilter>
-        <goals>
-          <goal>xml-check</goal>
-          <goal>xml-format</goal>
-        </goals>
-      </pluginExecutionFilter>
-      <action>
-        <ignore/>
-      </action>
-    </pluginExecution>
-  </pluginExecutions>
-</lifecycleMappingMetadata>
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>au.com.acegi.xmlformat.test</groupId>
+  <artifactId>test-project</artifactId>
+  <version>1.0.0</version>
+</project>
