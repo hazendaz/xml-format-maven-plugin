@@ -21,6 +21,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import static au.com.acegi.xmlformat.FormatUtil.format;
 import static au.com.acegi.xmlformat.FormatUtil.formatInPlace;
+import static au.com.acegi.xmlformat.FormatUtil.needsFormatting;
 import static au.com.acegi.xmlformat.TestUtil.getResource;
 import static au.com.acegi.xmlformat.TestUtil.streamToString;
 import static au.com.acegi.xmlformat.TestUtil.stringToFile;
@@ -172,6 +173,45 @@ public class FormatUtilTest {
     @Test
     void unformattedWillChange() throws DocumentException, IOException {
         inPlaceChange(UNFORMATTED_XML, true);
+    }
+
+    @Test
+    void needsFormattingReturnsFalseForEmptyFile() throws DocumentException, IOException {
+        final File file = File.createTempFile("junit", null, tmp);
+        // empty file: length == 0
+        assertThat(needsFormatting(file, new XmlOutputFormat()), is(false));
+    }
+
+    @Test
+    void needsFormattingReturnsFalseForFormattedFile() throws DocumentException, IOException {
+        final File file = File.createTempFile("junit", null, tmp);
+        stringToFile(FORMATTED_XML, file);
+
+        final XmlOutputFormat fmt = new XmlOutputFormat();
+        fmt.setSuppressDeclaration(true);
+        fmt.setIndent("");
+        fmt.setNewlines(false);
+
+        assertThat(needsFormatting(file, fmt), is(false));
+    }
+
+    @Test
+    void needsFormattingReturnsTrueForUnformattedFile() throws DocumentException, IOException {
+        final File file = File.createTempFile("junit", null, tmp);
+        stringToFile(UNFORMATTED_XML, file);
+
+        final XmlOutputFormat fmt = new XmlOutputFormat();
+        fmt.setSuppressDeclaration(true);
+        fmt.setIndent("");
+        fmt.setNewlines(false);
+
+        assertThat(needsFormatting(file, fmt), is(true));
+    }
+
+    @Test
+    void formatInPlaceReturnsFalseForEmptyFile() throws DocumentException, IOException {
+        final File file = File.createTempFile("junit", null, tmp);
+        assertThat(formatInPlace(file, new XmlOutputFormat()), is(false));
     }
 
     private void inPlaceChange(final String txt, final boolean shouldChange) throws DocumentException, IOException {

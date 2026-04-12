@@ -152,6 +152,25 @@ public class XmlCheckPluginTest {
         verify(log, atLeastOnce()).debug(anyString());
     }
 
+    @Test
+    void pluginSkip() throws MojoExecutionException, MojoFailureException {
+        final XmlCheckPlugin plugin = new XmlCheckPlugin();
+        plugin.setLog(log);
+        plugin.setSkip(true);
+        when(log.isDebugEnabled()).thenReturn(true);
+        when(log.isInfoEnabled()).thenReturn(true);
+        when(log.isErrorEnabled()).thenReturn(true);
+
+        plugin.setBaseDirectory(proj);
+        plugin.setIncludes("**/*.xml");
+        plugin.setTargetDirectory(target);
+
+        // Should not throw even though unformatted files exist
+        plugin.execute();
+
+        verify(log, atLeastOnce()).info("[xml-format] Skipped");
+    }
+
     private static File newFolder(final File root, final String... subDirs) throws IOException {
         final String subFolder = String.join("/", subDirs);
         final File result = root.toPath().resolve(subFolder).toFile();
