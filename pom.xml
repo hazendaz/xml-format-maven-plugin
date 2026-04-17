@@ -79,7 +79,7 @@
         <hamcrest.version>3.0</hamcrest.version>
         <junit.version>6.0.3</junit.version>
         <lang.version>3.20.0</lang.version>
-        <maven.version>3.9.14</maven.version>
+        <maven.version>3.9.15</maven.version>
         <mockito.version>5.23.0</mockito.version>
         <plexus-utils.version>4.0.3</plexus-utils.version>
 
