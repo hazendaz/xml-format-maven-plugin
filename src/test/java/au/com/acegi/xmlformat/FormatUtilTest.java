@@ -25,6 +25,7 @@ import static au.com.acegi.xmlformat.FormatUtil.needsFormatting;
 import static au.com.acegi.xmlformat.TestUtil.getResource;
 import static au.com.acegi.xmlformat.TestUtil.streamToString;
 import static au.com.acegi.xmlformat.TestUtil.stringToFile;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -168,6 +169,21 @@ public class FormatUtilTest {
                 format(in, out, new XmlOutputFormat());
             }
         });
+    }
+
+    @Test
+    void testWithExternalDoctypeDoesNotResolveNetworkEntity() throws DocumentException, IOException {
+        final String withExternalDtd = """
+                <?xml version="1.0" encoding="UTF-8"?>
+                <!DOCTYPE root SYSTEM "https://example.invalid/non-existent.dtd">
+                <root><child/></root>
+                """;
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        format(new java.io.ByteArrayInputStream(withExternalDtd.getBytes(UTF_8)), out, new XmlOutputFormat());
+
+        final String formatted = out.toString(UTF_8);
+        assertThat(formatted, containsString("<root>"));
+        assertThat(formatted, containsString("<child/>"));
     }
 
     @Test
