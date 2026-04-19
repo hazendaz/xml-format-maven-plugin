@@ -173,11 +173,8 @@ public class FormatUtilTest {
 
     @Test
     void testWithExternalDoctypeDoesNotResolveNetworkEntity() throws DocumentException, IOException {
-        final String withExternalDtd = """
-                <?xml version="1.0" encoding="UTF-8"?>
-                <!DOCTYPE root SYSTEM "https://example.invalid/non-existent.dtd">
-                <root><child/></root>
-                """;
+        final String withExternalDtd = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                + "<!DOCTYPE root SYSTEM \"https://example.invalid/non-existent.dtd\">\n" + "<root><child/></root>";
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         format(new java.io.ByteArrayInputStream(withExternalDtd.getBytes(UTF_8)), out, new XmlOutputFormat());
 
