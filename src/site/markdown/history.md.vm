@@ -30,5 +30,8 @@ with modern open source services such as GitHub (including GitHub Actions),
 Codecov and Maven Central. The major version number was bumped up to 3.0.0 to
 reflect this rewrite.
 
+In 2025, this project was transfered to 'hazendaz' which has become a home for many
+older plugins allowing it to continued forward.
+
 Like to make an improvement? Feel free! Just click the "Fork me on GitHub"
 ribbon above and send us a pull request.
