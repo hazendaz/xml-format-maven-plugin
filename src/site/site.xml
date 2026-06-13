@@ -11,7 +11,12 @@
 
 <site name="${project.name}" xmlns="http://maven.apache.org/SITE/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/SITE/2.0.0 https://maven.apache.org/xsd/site-2.0.0.xsd">
-  <bannerLeft name="XML Format Maven Plugin" />
+    <bannerLeft href="https://github.com/hazendaz">
+        <image src="/images/hazendaz-banner.jpg" />
+    </bannerLeft>
+    <bannerRight href="https://github.com/hazendaz">
+        <image src="/images/hazendaz.png" />
+    </bannerRight>
   <skin>
     <groupId>org.apache.maven.skins</groupId>
     <artifactId>maven-fluido-skin</artifactId>
@@ -23,7 +28,7 @@
       <sideBarEnabled>true</sideBarEnabled>
       <breadcrumbDivider>»</breadcrumbDivider>
       <gitHub>
-        <projectId>acegi/xml-format-maven-plugin</projectId>
+        <projectId>hazendaz/xml-format-maven-plugin</projectId>
         <ribbonOrientation>right</ribbonOrientation>
         <ribbonColor>gray</ribbonColor>
       </gitHub>

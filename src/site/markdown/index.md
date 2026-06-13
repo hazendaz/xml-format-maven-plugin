@@ -1,3 +1,5 @@
+# XML Format Maven Plugin
+
 This [Maven](https://maven.apache.org/) plugin automatically formats all XML
 files in your project. It will skip changing an XML file if it is already in the
 correct format.
@@ -14,6 +16,6 @@ POMs and
 [Simple Binary Encoding](https://github.com/real-logic/simple-binary-encoding)
 schemas. The plugin also uses a test suite to verify the correct formatting of
 complex XML files (see
-[test XML](https://github.com/acegi/xml-format-maven-plugin/tree/master/src/test/resources)).
+[test XML](https://github.com/hazendaz/xml-format-maven-plugin/tree/master/src/test/resources)).
 
 Ready to format? Take a look at the [usage instructions](usage.html).
