@@ -9,6 +9,10 @@
 
 Take a look at the [Project Web Site](https://hazendaz.github.io/xml-format-maven-plugin/) for full information.
 
-## Snapshots
+See plugin details [here](https://hazendaz.github.io/xml-format-maven-plugin/plugin-info.html)
 
-Snapshot releases are available in the [OSS Sonatype Snapshots Repository](https://central.sonatype.com/content/repositories/snapshots/com/github/hazendaz/maven/xml-format-maven-plugin).
+This plugin automatically formats all XML files in your project. It will skip changing an XML file if it is already in the correct format.
+
+Usage
+- Requires java 11 or better
+- Requires maven 3.6.3 or better
