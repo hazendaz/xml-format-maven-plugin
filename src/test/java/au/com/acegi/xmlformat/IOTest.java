@@ -17,6 +17,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -46,7 +47,7 @@ public class IOTest {
 
     @Test
     void hashFileMatchesStreamHash() throws IOException {
-        final File file = File.createTempFile("junit", ".xml", tmp);
+        final File file = Files.createTempFile(tmp.toPath(), "junit", ".xml").toFile();
         stringToFile("<root><child/></root>", file);
 
         final long fileHash = hash(file);
@@ -58,8 +59,8 @@ public class IOTest {
 
     @Test
     void hashDifferentContentProducesDifferentHash() throws IOException {
-        final File file1 = File.createTempFile("junit-a", ".xml", tmp);
-        final File file2 = File.createTempFile("junit-b", ".xml", tmp);
+        final File file1 = Files.createTempFile(tmp.toPath(), "junit-a", ".xml").toFile();
+        final File file2 = Files.createTempFile(tmp.toPath(), "junit-b", ".xml").toFile();
         stringToFile("<root><child/></root>", file1);
         stringToFile("<root><other/></root>", file2);
 
@@ -68,8 +69,8 @@ public class IOTest {
 
     @Test
     void hashSameContentProducesSameHash() throws IOException {
-        final File file1 = File.createTempFile("junit-c", ".xml", tmp);
-        final File file2 = File.createTempFile("junit-d", ".xml", tmp);
+        final File file1 = Files.createTempFile(tmp.toPath(), "junit-c", ".xml").toFile();
+        final File file2 = Files.createTempFile(tmp.toPath(), "junit-d", ".xml").toFile();
         final String content = "<root><child/></root>";
         stringToFile(content, file1);
         stringToFile(content, file2);

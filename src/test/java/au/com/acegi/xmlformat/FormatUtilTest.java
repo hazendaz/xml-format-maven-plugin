@@ -24,6 +24,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 
 import org.dom4j.DocumentException;
 import org.junit.jupiter.api.Test;
@@ -180,14 +181,14 @@ public class FormatUtilTest {
 
     @Test
     void needsFormattingReturnsFalseForEmptyFile() throws DocumentException, IOException {
-        final File file = File.createTempFile("junit", null, tmp);
+        final File file = Files.createTempFile(tmp.toPath(), "junit", null).toFile();
         // empty file: length == 0
         assertThat(needsFormatting(file, new XmlOutputFormat()), is(false));
     }
 
     @Test
     void needsFormattingReturnsFalseForFormattedFile() throws DocumentException, IOException {
-        final File file = File.createTempFile("junit", null, tmp);
+        final File file = Files.createTempFile(tmp.toPath(), "junit", null).toFile();
         stringToFile(FORMATTED_XML, file);
 
         final XmlOutputFormat fmt = new XmlOutputFormat();
@@ -200,7 +201,7 @@ public class FormatUtilTest {
 
     @Test
     void needsFormattingReturnsTrueForUnformattedFile() throws DocumentException, IOException {
-        final File file = File.createTempFile("junit", null, tmp);
+        final File file = Files.createTempFile(tmp.toPath(), "junit", null).toFile();
         stringToFile(UNFORMATTED_XML, file);
 
         final XmlOutputFormat fmt = new XmlOutputFormat();
@@ -213,12 +214,12 @@ public class FormatUtilTest {
 
     @Test
     void formatInPlaceReturnsFalseForEmptyFile() throws DocumentException, IOException {
-        final File file = File.createTempFile("junit", null, tmp);
+        final File file = Files.createTempFile(tmp.toPath(), "junit", null).toFile();
         assertThat(formatInPlace(file, new XmlOutputFormat()), is(false));
     }
 
     private void inPlaceChange(final String txt, final boolean shouldChange) throws DocumentException, IOException {
-        final File file = File.createTempFile("junit", null, tmp);
+        final File file = Files.createTempFile(tmp.toPath(), "junit", null).toFile();
         stringToFile(txt, file);
 
         final XmlOutputFormat fmt = new XmlOutputFormat();

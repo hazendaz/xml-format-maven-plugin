@@ -7,8 +7,8 @@
  */
 package au.com.acegi.xmlformat;
 
-import static java.io.File.createTempFile;
 import static java.nio.file.Files.copy;
+import static java.nio.file.Files.createTempFile;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 import static au.com.acegi.xmlformat.IOUtil.hash;
@@ -105,7 +105,7 @@ final class FormatUtil {
             return false;
         }
 
-        final File tmpFile = createTempFile(TMP_FILE_PREFIX, ".xml");
+        final File tmpFile = createTempFile(TMP_FILE_PREFIX, ".xml").toFile();
         tmpFile.deleteOnExit();
 
         try (InputStream in = Files.newInputStream(file.toPath());
@@ -145,7 +145,7 @@ final class FormatUtil {
             return false;
         }
 
-        final File tmpFile = createTempFile(TMP_FILE_PREFIX, ".xml");
+        final File tmpFile = createTempFile(TMP_FILE_PREFIX, ".xml").toFile();
         tmpFile.deleteOnExit();
 
         try (InputStream in = Files.newInputStream(file.toPath());

@@ -10,7 +10,6 @@ package au.com.acegi.xmlformat;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.StringTokenizer;
 
 import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Node;
@@ -27,7 +26,7 @@ class BlankLinesWriter extends XMLWriter {
 
     @Override
     protected void writeString(final String text) throws IOException {
-        if (text == null || text.length() == 0) {
+        if (text == null || text.isEmpty()) {
             return;
         }
 
@@ -38,14 +37,14 @@ class BlankLinesWriter extends XMLWriter {
 
         if (getOutputFormat().isTrimText()) {
             boolean first = true;
-            final StringTokenizer tokenizer = new StringTokenizer(input, " \t\r\f");
+            final String[] tokens = input.split("[ \\t\\r\\f]+", -1);
 
             final NewLinesHandler newLinesHandler = new NewLinesHandler();
-            while (tokenizer.hasMoreTokens()) {
-                final String token = tokenizer.nextToken();
+            for (int i = 0; i < tokens.length; i++) {
+                final String token = tokens[i];
 
                 // Only if more tokens exist, continue
-                if (newLinesHandler.processToken(token, tokenizer.hasMoreTokens())) {
+                if (newLinesHandler.processToken(token, i < tokens.length - 1)) {
                     continue;
                 }
 
