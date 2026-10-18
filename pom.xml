@@ -67,6 +67,9 @@
         <java.release.version>11</java.release.version>
         <javadoc.java.release.version>11</javadoc.java.release.version>
 
+        <!-- Coverage -->
+        <jacoco.minimum.coverage>0.66</jacoco.minimum.coverage>
+
         <!-- Plugins -->
         <maven-plugin.version>3.16.0</maven-plugin.version>
 
