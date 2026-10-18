@@ -37,7 +37,7 @@ class BlankLinesWriter extends XMLWriter {
 
         if (getOutputFormat().isTrimText()) {
             boolean first = true;
-            final String[] tokens = input.split("[ \\t\\r\\f]+", -1);
+            final String[] tokens = input.split("[ \\t\\r\\f]+");
 
             final NewLinesHandler newLinesHandler = new NewLinesHandler();
             for (int i = 0; i < tokens.length; i++) {
