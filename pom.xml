@@ -84,7 +84,7 @@
         <mockito.version>5.24.0</mockito.version>
         <plexus-utils.version>4.1.0</plexus-utils.version>
 
-        <!-- Keep formatters generaly off, use only selectively to cleanup formatting of source files -->
+        <!-- Keep formatters generally off, use only selectively to cleanup formatting of source files -->
         <formatter.skip>true</formatter.skip>
         <rewrite.skip>true</rewrite.skip>
         <spotbugs.skip>true</spotbugs.skip>
