@@ -18,11 +18,11 @@
   }, {
     "groupId" : "com.github.spotbugs",
     "artifactId" : "spotbugs-annotations",
-    "version" : "4.10.4",
+    "version" : "4.10.5",
     "scope" : "provided",
     "type" : "jar",
     "optional" : false,
-    "integrity" : "sha512:NgSVZSzJJEehIVqUo4xgcOTPxPubdJpxD4U0HII7HfyyXvHVNvOBOQcfON+Bp8S1hBWdViU4XfTxwz/V8Dzaag=="
+    "integrity" : "sha512:uPXiXwKFlg/IAdOENoQ/RQH4H/oc5433LJhJ9B3CgcXdqJEcM1XRWq5jOjIJtdeabVKG929YpYweJTl88kLGUw=="
   }, {
     "groupId" : "com.google.code.findbugs",
     "artifactId" : "jsr305",
@@ -339,11 +339,11 @@
   }, {
     "groupId" : "org.checkerframework",
     "artifactId" : "checker-qual",
-    "version" : "4.2.3",
+    "version" : "4.3.1",
     "scope" : "compile",
     "type" : "jar",
     "optional" : false,
-    "integrity" : "sha512:m+q1ytNZ0j42fCAZkC3HAD1cRb5rcHmPFUkAN9NtKXbSnNYyKtCCl1elpP05iKvd417IPQG6KCMw6gxyFbU4Yw=="
+    "integrity" : "sha512:kb4GknBsWItU+8PB8YpQeRflQFNhCJYJRFfUyMdoHfSwOOeGdv9iB+Rl1b7QhDVxMVNNmmRH63QsAKFHgQcg0Q=="
   }, {
     "groupId" : "org.codehaus.plexus",
     "artifactId" : "plexus-cipher",
@@ -459,11 +459,11 @@
   }, {
     "groupId" : "org.jspecify",
     "artifactId" : "jspecify",
-    "version" : "1.0.0",
+    "version" : "1.0.1",
     "scope" : "provided",
     "type" : "jar",
     "optional" : false,
-    "integrity" : "sha512:797THvWzQvCUIpNQduWZeJB2Qx6Tp0ZoXAYH595VknGbpqrN4L5nCz8GTR6FYw1Y1bzms0rtKiiP2zT3Re+3vA=="
+    "integrity" : "sha512:j1ym9cJe41O/vj5eXNmEezs+0elUoUpSyaoBbGc+Ar+8Lg+TCK1XbCpYcg+L8hOa2Yg8eogQUP6Wovh+LmI3EQ=="
   }, {
     "groupId" : "org.junit.jupiter",
     "artifactId" : "junit-jupiter-api",
