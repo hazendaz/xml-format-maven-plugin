@@ -17,60 +17,27 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.testing.MojoRule;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
- * Integration-style tests for {@link AbstractXmlPlugin} subclasses using the Maven Plugin Testing Harness
- * ({@link MojoRule}).
+ * Integration-style tests for {@link AbstractXmlPlugin} subclasses.
  *
  * <p>
- * The harness is used specifically for its {@code setVariableValueToObject} utility, which reflects into private
- * {@code @Parameter} fields that have no package-private setters — such as {@code tabIndent}, {@code lineEnding},
- * {@code keepBlankLines}, {@code expandEmptyElements}, and {@code indentSize}.
- *
- * <p>
- * Mojos are created directly via {@code new} rather than Plexus container lookup (which requires a pre-generated Sisu
- * component index). The package-private setters in {@link AbstractXmlPlugin} handle the mandatory parameters while the
- * harness handles the remainder via reflection.
+ * Mojos are instantiated directly. Package-private setters in {@link AbstractXmlPlugin} handle mandatory parameters,
+ * while Java reflection configures private {@code @Parameter} fields whose Maven defaults differ from their Java
+ * field defaults.
  */
-public class AbstractXmlPluginMojoRuleTest {
-
-    /** Exposes the protected {@code before}/{@code after} lifecycle hooks for use in JUnit 5. */
-    private static final class TestMojoRule extends MojoRule {
-        @Override
-        public void before() throws Throwable {
-            super.before();
-        }
-
-        @Override
-        public void after() {
-            super.after();
-        }
-    }
+class AbstractXmlPluginTest {
 
     private static final String UNFORMATTED_XML = "<root>  <child/>  </root>";
     private static final String INCLUDE_ALL_XML = "**/*.xml";
 
     @TempDir
     private File tmp;
-
-    private final TestMojoRule rule = new TestMojoRule();
-
-    @BeforeEach
-    void setupHarness() throws Throwable {
-        rule.before();
-    }
-
-    @AfterEach
-    void tearDownHarness() {
-        rule.after();
-    }
 
     // -------------------------------------------------------------------------
     // Mojo instantiation
@@ -87,7 +54,7 @@ public class AbstractXmlPluginMojoRuleTest {
     }
 
     // -------------------------------------------------------------------------
-    // xml-format goal — parameter variations via MojoRule reflection
+    // xml-format goal — parameter variations
     // -------------------------------------------------------------------------
 
     @Test
@@ -110,7 +77,7 @@ public class AbstractXmlPluginMojoRuleTest {
         writeXmlFile(proj, "sample.xml", UNFORMATTED_XML);
 
         final XmlFormatPlugin mojo = configureMojo(new XmlFormatPlugin(), proj, target);
-        rule.setVariableValueToObject(mojo, "tabIndent", true);
+        setFieldValue(mojo, "tabIndent", true);
         mojo.execute();
 
         final String formatted = fileToString(proj.toPath().resolve("sample.xml").toFile());
@@ -124,7 +91,7 @@ public class AbstractXmlPluginMojoRuleTest {
         writeXmlFile(proj, "sample.xml", UNFORMATTED_XML);
 
         final XmlFormatPlugin mojo = configureMojo(new XmlFormatPlugin(), proj, target);
-        rule.setVariableValueToObject(mojo, "lineEnding", LineEnding.CRLF);
+        setFieldValue(mojo, "lineEnding", LineEnding.CRLF);
         mojo.execute();
 
         final String formatted = fileToString(proj.toPath().resolve("sample.xml").toFile());
@@ -138,7 +105,7 @@ public class AbstractXmlPluginMojoRuleTest {
         writeXmlFile(proj, "sample.xml", UNFORMATTED_XML);
 
         final XmlFormatPlugin mojo = configureMojo(new XmlFormatPlugin(), proj, target);
-        rule.setVariableValueToObject(mojo, "lineEnding", LineEnding.CR);
+        setFieldValue(mojo, "lineEnding", LineEnding.CR);
         mojo.execute();
 
         final String formatted = fileToString(proj.toPath().resolve("sample.xml").toFile());
@@ -153,7 +120,7 @@ public class AbstractXmlPluginMojoRuleTest {
         writeXmlFile(proj, "sample.xml", xmlWithBlankLine);
 
         final XmlFormatPlugin mojo = configureMojo(new XmlFormatPlugin(), proj, target);
-        rule.setVariableValueToObject(mojo, "keepBlankLines", true);
+        setFieldValue(mojo, "keepBlankLines", true);
         mojo.execute();
 
         final String formatted = fileToString(proj.toPath().resolve("sample.xml").toFile());
@@ -167,7 +134,7 @@ public class AbstractXmlPluginMojoRuleTest {
         writeXmlFile(proj, "sample.xml", "<root><child/></root>");
 
         final XmlFormatPlugin mojo = configureMojo(new XmlFormatPlugin(), proj, target);
-        rule.setVariableValueToObject(mojo, "expandEmptyElements", true);
+        setFieldValue(mojo, "expandEmptyElements", true);
         mojo.execute();
 
         final String formatted = fileToString(proj.toPath().resolve("sample.xml").toFile());
@@ -181,7 +148,7 @@ public class AbstractXmlPluginMojoRuleTest {
         writeXmlFile(proj, "sample.xml", UNFORMATTED_XML);
 
         final XmlFormatPlugin mojo = configureMojo(new XmlFormatPlugin(), proj, target);
-        rule.setVariableValueToObject(mojo, "indentSize", 4);
+        setFieldValue(mojo, "indentSize", 4);
         mojo.execute();
 
         final String formatted = fileToString(proj.toPath().resolve("sample.xml").toFile());
@@ -220,7 +187,7 @@ public class AbstractXmlPluginMojoRuleTest {
         writeXmlFile(proj, "sample.xml", UNFORMATTED_XML);
 
         final XmlFormatPlugin mojo = configureMojo(new XmlFormatPlugin(), proj, target);
-        rule.setVariableValueToObject(mojo, "suppressDeclaration", true);
+        setFieldValue(mojo, "suppressDeclaration", true);
         mojo.execute();
 
         final String formatted = fileToString(proj.toPath().resolve("sample.xml").toFile());
@@ -234,11 +201,11 @@ public class AbstractXmlPluginMojoRuleTest {
         writeXmlFile(proj, "sample.xml", UNFORMATTED_XML);
 
         final XmlFormatPlugin mojo = configureMojo(new XmlFormatPlugin(), proj, target);
-        rule.setVariableValueToObject(mojo, "omitEncoding", true);
+        setFieldValue(mojo, "omitEncoding", true);
         mojo.execute();
 
         final String formatted = fileToString(proj.toPath().resolve("sample.xml").toFile());
-        // Encoding attribute should be absent from the XML declaration
+        // Encoding attribute should be absent from the XML declaration.
         assertThat(formatted.contains("encoding="), is(false));
     }
 
@@ -263,10 +230,10 @@ public class AbstractXmlPluginMojoRuleTest {
         final File target = createTargetDir(proj);
         writeXmlFile(proj, "sample.xml", UNFORMATTED_XML);
 
-        // First format the file so that the check will pass
+        // First format the file so that the check will pass.
         configureMojo(new XmlFormatPlugin(), proj, target).execute();
 
-        // Now verify the check mojo considers the file already formatted
+        // Now verify the check mojo considers the file already formatted.
         configureMojo(new XmlCheckPlugin(), proj, target).execute();
     }
 
@@ -305,20 +272,41 @@ public class AbstractXmlPluginMojoRuleTest {
     }
 
     /**
-     * Applies the mandatory parameters to any {@link AbstractXmlPlugin} mojo via the package-private setters.
-     * Additionally uses the harness reflection helper to set the {@code @Parameter} fields whose Maven default values
-     * differ from the Java field defaults (because no explicit field initializer is present in the source).
+     * Applies the mandatory parameters to any {@link AbstractXmlPlugin} mojo via package-private setters.
+     * Also sets {@code @Parameter} fields whose Maven defaults differ from their Java field defaults.
      */
-    private <T extends AbstractXmlPlugin> T configureMojo(final T mojo, final File baseDir, final File targetDir)
-            throws IllegalAccessException {
+    private <T extends AbstractXmlPlugin> T configureMojo(
+            final T mojo, final File baseDir, final File targetDir) throws ReflectiveOperationException {
         mojo.setBaseDirectory(baseDir);
         mojo.setTargetDirectory(targetDir);
         mojo.setIncludes(INCLUDE_ALL_XML);
         mojo.setExcludes();
-        // These @Parameter fields have defaultValue != Java field default, so we must set them explicitly.
-        rule.setVariableValueToObject(mojo, "newlines", true);
-        rule.setVariableValueToObject(mojo, "trimText", true);
-        rule.setVariableValueToObject(mojo, "indentSize", 2);
+
+        setFieldValue(mojo, "newlines", true);
+        setFieldValue(mojo, "trimText", true);
+        setFieldValue(mojo, "indentSize", 2);
+
         return mojo;
+    }
+
+    /**
+     * Sets a field value using reflection, including private fields declared by a superclass.
+     */
+    private void setFieldValue(final Object target, final String fieldName, final Object value)
+            throws ReflectiveOperationException {
+        Class<?> type = target.getClass();
+
+        while (type != null) {
+            try {
+                final Field field = type.getDeclaredField(fieldName);
+                field.setAccessible(true);
+                field.set(target, value);
+                return;
+            } catch (final NoSuchFieldException exception) {
+                type = type.getSuperclass();
+            }
+        }
+
+        throw new NoSuchFieldException(fieldName);
     }
 }
