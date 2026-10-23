@@ -74,7 +74,7 @@
         <maven-plugin.version>3.16.0</maven-plugin.version>
 
         <!-- Libraries -->
-        <byte-buddy.version>1.18.15</byte-buddy.version>
+        <byte-buddy.version>1.18.16</byte-buddy.version>
         <commons-logging.version>1.4.0</commons-logging.version>
         <dom4j.version>2.2.0</dom4j.version>
         <hamcrest.version>3.0</hamcrest.version>
