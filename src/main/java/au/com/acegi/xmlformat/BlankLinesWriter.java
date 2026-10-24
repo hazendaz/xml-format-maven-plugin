@@ -20,6 +20,13 @@ import org.dom4j.io.XMLWriter;
  */
 class BlankLinesWriter extends XMLWriter {
 
+    /**
+     * Instantiates a new blank lines writer.
+     *
+     * @param out the out
+     * @param fmt the fmt
+     * @throws UnsupportedEncodingException the unsupported encoding exception
+     */
     BlankLinesWriter(final OutputStream out, final XmlOutputFormat fmt) throws UnsupportedEncodingException {
         super(out, fmt);
     }
@@ -67,7 +74,11 @@ class BlankLinesWriter extends XMLWriter {
         }
     }
 
+    /**
+     * The Class NewLinesHandler.
+     */
     private final class NewLinesHandler {
+        /** The new lines count. */
         private int newLinesCount;
 
         /**

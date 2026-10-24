@@ -16,6 +16,9 @@ import org.junit.jupiter.api.Test;
 /** Tests coverage of generated {@link HelpMojo}. */
 class HelpMojoTest {
 
+    /**
+     * Execute supports detailed output with invalid sizing.
+     */
     @Test
     void executeSupportsDetailedOutputWithInvalidSizing() {
         final HelpMojo mojo = new HelpMojo();
@@ -26,6 +29,9 @@ class HelpMojoTest {
         assertDoesNotThrow(mojo::execute);
     }
 
+    /**
+     * Execute supports specific goal output.
+     */
     @Test
     void executeSupportsSpecificGoalOutput() {
         final HelpMojo mojo = new HelpMojo();
@@ -35,6 +41,9 @@ class HelpMojoTest {
         assertDoesNotThrow(mojo::execute);
     }
 
+    /**
+     * Execute supports unknown goal without failure.
+     */
     @Test
     void executeSupportsUnknownGoalWithoutFailure() {
         final HelpMojo mojo = new HelpMojo();
@@ -43,6 +52,13 @@ class HelpMojoTest {
         assertDoesNotThrow(mojo::execute);
     }
 
+    /**
+     * Set field.
+     *
+     * @param mojo the mojo
+     * @param fieldName the field name
+     * @param value the value
+     */
     private static void setField(final HelpMojo mojo, final String fieldName, final Object value) {
         try {
             final Field field = HelpMojo.class.getDeclaredField(fieldName);

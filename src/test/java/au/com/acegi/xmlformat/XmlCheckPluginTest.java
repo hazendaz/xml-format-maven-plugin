@@ -35,23 +35,39 @@ import org.junit.jupiter.api.io.TempDir;
  */
 public class XmlCheckPluginTest {
 
+    /** The empty file name. */
     private static final String EMPTY_FILE_NAME = "empty.xml";
+    /** The empty txt. */
     private static final String EMPTY_TXT = "";
+    /** The err file name. */
     private static final String ERR_FILE_NAME = "error.xml";
+    /** The err txt. */
     private static final String ERR_TXT = "<xml> <hello> hello not closed! </xml>";
+    /** The no chg txt. */
     private static final String NO_CHG_TXT = "<xml> <leave-me-alone/> </xml>";
+    /** The to chg file name. */
     private static final String TO_CHG_FILE_NAME = "my.xml";
+    /** The to chg txt. */
     private static final String TO_CHG_TXT = "<xml> <hello/> </xml>";
 
+    /** The tmp. */
     @TempDir
     private File tmp;
 
+    /** The log. */
     @SuppressWarnings("PMD.ProperLogger")
     private Log log;
 
+    /** The proj. */
     private File proj;
+    /** The target. */
     private File target;
 
+    /**
+     * Before.
+     *
+     * @throws IOException the io exception
+     */
     @BeforeEach
     void before() throws IOException {
         proj = newFolder(tmp, "junit");
@@ -78,6 +94,11 @@ public class XmlCheckPluginTest {
         log = mock(Log.class);
     }
 
+    /**
+     * Plugin reports error.
+     *
+     * @throws MojoExecutionException the mojo execution exception
+     */
     @Test
     @SuppressWarnings("PMD.JUnitUseExpected")
     void pluginReportsError() throws MojoExecutionException {
@@ -100,6 +121,11 @@ public class XmlCheckPluginTest {
         verify(log, atLeastOnce()).debug(anyString());
     }
 
+    /**
+     * Plugin reports formatting needed.
+     *
+     * @throws MojoFailureException the mojo failure exception
+     */
     @Test
     @SuppressWarnings("PMD.JUnitUseExpected")
     void pluginReportsFormattingNeeded() throws MojoFailureException {
@@ -123,6 +149,12 @@ public class XmlCheckPluginTest {
         verify(log, atLeastOnce()).debug(anyString());
     }
 
+    /**
+     * Plugin succeeds when all formatted.
+     *
+     * @throws MojoExecutionException the mojo execution exception
+     * @throws MojoFailureException the mojo failure exception
+     */
     @Test
     void pluginSucceedsWhenAllFormatted() throws MojoExecutionException, MojoFailureException {
         final XmlCheckPlugin plugin = new XmlCheckPlugin();
@@ -142,6 +174,12 @@ public class XmlCheckPluginTest {
         verify(log, atLeastOnce()).debug(anyString());
     }
 
+    /**
+     * Plugin skip.
+     *
+     * @throws MojoExecutionException the mojo execution exception
+     * @throws MojoFailureException the mojo failure exception
+     */
     @Test
     void pluginSkip() throws MojoExecutionException, MojoFailureException {
         final XmlCheckPlugin plugin = new XmlCheckPlugin();
@@ -161,6 +199,14 @@ public class XmlCheckPluginTest {
         verify(log, atLeastOnce()).info("[xml-format] Skipped");
     }
 
+    /**
+     * New folder.
+     *
+     * @param root the root
+     * @param subDirs the sub dirs
+     * @return the file
+     * @throws IOException the io exception
+     */
     private static File newFolder(final File root, final String... subDirs) throws IOException {
         final String subFolder = String.join("/", subDirs);
         final File result = root.toPath().resolve(subFolder).toFile();

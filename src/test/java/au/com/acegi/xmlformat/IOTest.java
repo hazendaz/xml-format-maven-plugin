@@ -27,24 +27,45 @@ import org.junit.jupiter.api.io.TempDir;
  */
 public class IOTest {
 
+    /** The tmp. */
     @TempDir
     private File tmp;
 
+    /**
+     * Hash1.
+     *
+     * @throws IOException the io exception
+     */
     @Test
     void hash1() throws IOException {
         testHash("/test1-in.xml", 459_402_491L);
     }
 
+    /**
+     * Hash2.
+     *
+     * @throws IOException the io exception
+     */
     @Test
     void hash2() throws IOException {
         testHash("/test2-in.xml", 1_687_393_391L);
     }
 
+    /**
+     * Hash invalid.
+     *
+     * @throws IOException the io exception
+     */
     @Test
     void hashInvalid() throws IOException {
         testHash("/invalid.xml", 2_274_913_643L);
     }
 
+    /**
+     * Hash file matches stream hash.
+     *
+     * @throws IOException the io exception
+     */
     @Test
     void hashFileMatchesStreamHash() throws IOException {
         final File file = Files.createTempFile(tmp.toPath(), "junit", ".xml").toFile();
@@ -57,6 +78,11 @@ public class IOTest {
         }
     }
 
+    /**
+     * Hash different content produces different hash.
+     *
+     * @throws IOException the io exception
+     */
     @Test
     void hashDifferentContentProducesDifferentHash() throws IOException {
         final File file1 = Files.createTempFile(tmp.toPath(), "junit-a", ".xml").toFile();
@@ -67,6 +93,11 @@ public class IOTest {
         assertThat(hash(file1), not(hash(file2)));
     }
 
+    /**
+     * Hash same content produces same hash.
+     *
+     * @throws IOException the io exception
+     */
     @Test
     void hashSameContentProducesSameHash() throws IOException {
         final File file1 = Files.createTempFile(tmp.toPath(), "junit-c", ".xml").toFile();
@@ -78,6 +109,13 @@ public class IOTest {
         assertThat(hash(file1), is(hash(file2)));
     }
 
+    /**
+     * Test hash.
+     *
+     * @param resource the resource
+     * @param expected the expected
+     * @throws IOException the io exception
+     */
     private void testHash(final String resource, final long expected) throws IOException {
         try (InputStream in = getResource(resource)) {
             final long hash = hash(in);

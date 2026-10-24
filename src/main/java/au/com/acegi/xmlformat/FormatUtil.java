@@ -35,8 +35,12 @@ import org.xml.sax.SAXException;
  */
 final class FormatUtil {
 
+    /** The tmp file prefix. */
     private static final String TMP_FILE_PREFIX = FormatUtil.class.getSimpleName();
 
+    /**
+     * Instantiates a new format util.
+     */
     private FormatUtil() {
     }
 
@@ -74,6 +78,14 @@ final class FormatUtil {
         xmlWriter.flush();
     }
 
+    /**
+     * Get xml writer.
+     *
+     * @param out the out
+     * @param fmt the fmt
+     * @return the xml writer
+     * @throws UnsupportedEncodingException the unsupported encoding exception
+     */
     private static XMLWriter getXmlWriter(final OutputStream out, final XmlOutputFormat fmt)
             throws UnsupportedEncodingException {
         final XMLWriter xmlWriter;

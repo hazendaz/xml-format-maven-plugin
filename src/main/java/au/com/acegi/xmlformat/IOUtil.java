@@ -20,6 +20,9 @@ import java.util.zip.Checksum;
  */
 final class IOUtil {
 
+    /**
+     * Instantiates a new io util.
+     */
     private IOUtil() {
     }
 

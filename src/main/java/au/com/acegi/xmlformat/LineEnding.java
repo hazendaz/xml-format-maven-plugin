@@ -32,12 +32,21 @@ public enum LineEnding {
      */
     CR("\r");
 
+    /** The chars. */
     private final String chars;
 
+    /**
+     * Instantiates a new line ending.
+     */
     LineEnding() {
         this.chars = System.lineSeparator();
     }
 
+    /**
+     * Instantiates a new line ending.
+     *
+     * @param value the value
+     */
     LineEnding(final String value) {
         this.chars = value;
     }

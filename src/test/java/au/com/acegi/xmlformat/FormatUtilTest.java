@@ -33,17 +33,32 @@ import org.junit.jupiter.api.io.TempDir;
 /** Tests {@link FormatUtil}. */
 public class FormatUtilTest {
 
+    /** The formatted xml. */
     private static final String FORMATTED_XML = "<xml><hello/></xml>";
+    /** The unformatted xml. */
     private static final String UNFORMATTED_XML = "<xml>   <hello/> </xml>";
 
+    /** The tmp. */
     @TempDir
     private File tmp;
 
+    /**
+     * Formatted will not change.
+     *
+     * @throws DocumentException the document exception
+     * @throws IOException the io exception
+     */
     @Test
     void formattedWillNotChange() throws DocumentException, IOException {
         inPlaceChange(FORMATTED_XML, false);
     }
 
+    /**
+     * Test1.
+     *
+     * @throws DocumentException the document exception
+     * @throws IOException the io exception
+     */
     @Test
     void test1() throws DocumentException, IOException {
         final XmlOutputFormat fmt = new XmlOutputFormat();
@@ -53,6 +68,12 @@ public class FormatUtilTest {
         testInOut(1, fmt);
     }
 
+    /**
+     * Test1 keep blank lines.
+     *
+     * @throws DocumentException the document exception
+     * @throws IOException the io exception
+     */
     @Test
     void test1KeepBlankLines() throws DocumentException, IOException {
         final XmlOutputFormat fmt = new XmlOutputFormat();
@@ -63,6 +84,12 @@ public class FormatUtilTest {
         testInOut(1, fmt);
     }
 
+    /**
+     * Test2.
+     *
+     * @throws DocumentException the document exception
+     * @throws IOException the io exception
+     */
     @Test
     void test2() throws DocumentException, IOException {
         final XmlOutputFormat fmt = new XmlOutputFormat();
@@ -72,6 +99,12 @@ public class FormatUtilTest {
         testInOut(2, fmt);
     }
 
+    /**
+     * Test2 keep blank lines.
+     *
+     * @throws DocumentException the document exception
+     * @throws IOException the io exception
+     */
     @Test
     void test2KeepBlankLines() throws DocumentException, IOException {
         final XmlOutputFormat fmt = new XmlOutputFormat();
@@ -82,6 +115,12 @@ public class FormatUtilTest {
         testInOut(2, fmt);
     }
 
+    /**
+     * Test3.
+     *
+     * @throws DocumentException the document exception
+     * @throws IOException the io exception
+     */
     @Test
     void test3() throws DocumentException, IOException {
         final XmlOutputFormat fmt = new XmlOutputFormat();
@@ -91,6 +130,12 @@ public class FormatUtilTest {
         testInOut(3, fmt);
     }
 
+    /**
+     * Test4.
+     *
+     * @throws DocumentException the document exception
+     * @throws IOException the io exception
+     */
     @Test
     void test4() throws DocumentException, IOException {
         final XmlOutputFormat fmt = new XmlOutputFormat();
@@ -100,6 +145,12 @@ public class FormatUtilTest {
         testInOut(4, fmt);
     }
 
+    /**
+     * Test4 keep blank lines.
+     *
+     * @throws DocumentException the document exception
+     * @throws IOException the io exception
+     */
     @Test
     void test4KeepBlankLines() throws DocumentException, IOException {
         final XmlOutputFormat fmt = new XmlOutputFormat();
@@ -110,6 +161,12 @@ public class FormatUtilTest {
         testInOut(4, fmt);
     }
 
+    /**
+     * Test5.
+     *
+     * @throws DocumentException the document exception
+     * @throws IOException the io exception
+     */
     @Test
     void test5() throws DocumentException, IOException {
         final XmlOutputFormat fmt = new XmlOutputFormat();
@@ -123,6 +180,9 @@ public class FormatUtilTest {
     /**
      * New lines between the XML declaration and the root elements are ignored at the parse level it seems, they don't
      * reach the XMLWriter. Not ideal, but believe we can leave with this exception
+     
+     * @throws DocumentException the document exception
+     * @throws IOException the io exception
      */
     @Test
     void test5KeepBlankLines() throws DocumentException, IOException {
@@ -139,6 +199,9 @@ public class FormatUtilTest {
     /**
      * New lines between the XML declaration and the root elements are ignored at the parse level it seems, they don't
      * reach the XMLWriter. Not ideal, but believe we can leave with this exception
+     
+     * @throws DocumentException the document exception
+     * @throws IOException the io exception
      */
     @Test
     void test6() throws DocumentException, IOException {
@@ -152,6 +215,12 @@ public class FormatUtilTest {
         testInOut(6, fmt);
     }
 
+    /**
+     * Test invalid.
+     *
+     * @throws DocumentException the document exception
+     * @throws IOException the io exception
+     */
     @Test
     void testInvalid() throws DocumentException, IOException {
         assertThrows(DocumentException.class, () -> {
@@ -162,6 +231,12 @@ public class FormatUtilTest {
         });
     }
 
+    /**
+     * Test with external doctype does not resolve network entity.
+     *
+     * @throws DocumentException the document exception
+     * @throws IOException the io exception
+     */
     @Test
     void testWithExternalDoctypeDoesNotResolveNetworkEntity() throws DocumentException, IOException {
         final String withExternalDtd = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -174,11 +249,23 @@ public class FormatUtilTest {
         assertThat(formatted, containsString("<child/>"));
     }
 
+    /**
+     * Unformatted will change.
+     *
+     * @throws DocumentException the document exception
+     * @throws IOException the io exception
+     */
     @Test
     void unformattedWillChange() throws DocumentException, IOException {
         inPlaceChange(UNFORMATTED_XML, true);
     }
 
+    /**
+     * Needs formatting returns false for empty file.
+     *
+     * @throws DocumentException the document exception
+     * @throws IOException the io exception
+     */
     @Test
     void needsFormattingReturnsFalseForEmptyFile() throws DocumentException, IOException {
         final File file = Files.createTempFile(tmp.toPath(), "junit", null).toFile();
@@ -186,6 +273,12 @@ public class FormatUtilTest {
         assertThat(needsFormatting(file, new XmlOutputFormat()), is(false));
     }
 
+    /**
+     * Needs formatting returns false for formatted file.
+     *
+     * @throws DocumentException the document exception
+     * @throws IOException the io exception
+     */
     @Test
     void needsFormattingReturnsFalseForFormattedFile() throws DocumentException, IOException {
         final File file = Files.createTempFile(tmp.toPath(), "junit", null).toFile();
@@ -199,6 +292,12 @@ public class FormatUtilTest {
         assertThat(needsFormatting(file, fmt), is(false));
     }
 
+    /**
+     * Needs formatting returns true for unformatted file.
+     *
+     * @throws DocumentException the document exception
+     * @throws IOException the io exception
+     */
     @Test
     void needsFormattingReturnsTrueForUnformattedFile() throws DocumentException, IOException {
         final File file = Files.createTempFile(tmp.toPath(), "junit", null).toFile();
@@ -212,12 +311,26 @@ public class FormatUtilTest {
         assertThat(needsFormatting(file, fmt), is(true));
     }
 
+    /**
+     * Format in place returns false for empty file.
+     *
+     * @throws DocumentException the document exception
+     * @throws IOException the io exception
+     */
     @Test
     void formatInPlaceReturnsFalseForEmptyFile() throws DocumentException, IOException {
         final File file = Files.createTempFile(tmp.toPath(), "junit", null).toFile();
         assertThat(formatInPlace(file, new XmlOutputFormat()), is(false));
     }
 
+    /**
+     * In place change.
+     *
+     * @param txt the txt
+     * @param shouldChange the should change
+     * @throws DocumentException the document exception
+     * @throws IOException the io exception
+     */
     private void inPlaceChange(final String txt, final boolean shouldChange) throws DocumentException, IOException {
         final File file = Files.createTempFile(tmp.toPath(), "junit", null).toFile();
         stringToFile(txt, file);
@@ -231,6 +344,14 @@ public class FormatUtilTest {
         assertThat(written, is(shouldChange));
     }
 
+    /**
+     * Test in out.
+     *
+     * @param id the id
+     * @param fmt the fmt
+     * @throws DocumentException the document exception
+     * @throws IOException the io exception
+     */
     private void testInOut(final int id, final XmlOutputFormat fmt) throws DocumentException, IOException {
         try (InputStream in = getResource("/test" + id + "-in.xml")) {
             final ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -242,6 +363,13 @@ public class FormatUtilTest {
         }
     }
 
+    /**
+     * Get output file name.
+     *
+     * @param id the id
+     * @param fmt the fmt
+     * @return the string
+     */
     private String getOutputFileName(final int id, final XmlOutputFormat fmt) {
         if (fmt.isKeepBlankLines()) {
             return "/test" + id + "-out-kbl.xml";

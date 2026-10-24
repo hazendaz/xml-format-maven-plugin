@@ -17,6 +17,9 @@ import org.junit.jupiter.api.Test;
  */
 public class XmlOutputFormatTest {
 
+    /**
+     * Default indent size is two.
+     */
     @Test
     void defaultIndentSizeIsTwo() {
         final XmlOutputFormat fmt = new XmlOutputFormat();
@@ -24,30 +27,45 @@ public class XmlOutputFormatTest {
         assertThat(fmt.getIndent().length(), is(2));
     }
 
+    /**
+     * Default newlines is true.
+     */
     @Test
     void defaultNewlinesIsTrue() {
         final XmlOutputFormat fmt = new XmlOutputFormat();
         assertThat(fmt.isNewlines(), is(true));
     }
 
+    /**
+     * Default trim text is true.
+     */
     @Test
     void defaultTrimTextIsTrue() {
         final XmlOutputFormat fmt = new XmlOutputFormat();
         assertThat(fmt.isTrimText(), is(true));
     }
 
+    /**
+     * Default pad text is true.
+     */
     @Test
     void defaultPadTextIsTrue() {
         final XmlOutputFormat fmt = new XmlOutputFormat();
         assertThat(fmt.isPadText(), is(true));
     }
 
+    /**
+     * Default keep blank lines is false.
+     */
     @Test
     void defaultKeepBlankLinesIsFalse() {
         final XmlOutputFormat fmt = new XmlOutputFormat();
         assertThat(fmt.isKeepBlankLines(), is(false));
     }
 
+    /**
+     * Set keep blank lines to true.
+     */
     @Test
     void setKeepBlankLinesToTrue() {
         final XmlOutputFormat fmt = new XmlOutputFormat();
@@ -55,6 +73,9 @@ public class XmlOutputFormatTest {
         assertThat(fmt.isKeepBlankLines(), is(true));
     }
 
+    /**
+     * Set keep blank lines to false.
+     */
     @Test
     void setKeepBlankLinesToFalse() {
         final XmlOutputFormat fmt = new XmlOutputFormat();

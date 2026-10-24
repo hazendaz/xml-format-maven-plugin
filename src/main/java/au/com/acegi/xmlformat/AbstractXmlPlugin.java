@@ -238,30 +238,65 @@ public abstract class AbstractXmlPlugin extends AbstractMojo {
      */
     protected abstract void afterAllProcessed(boolean neededFormatting) throws MojoExecutionException;
 
+    /**
+     * Sets the base directory.
+     *
+     * @param baseDirectory the base directory
+     */
     void setBaseDirectory(final File baseDirectory) {
         this.baseDirectory = baseDirectory;
     }
 
+    /**
+     * Sets the excludes.
+     *
+     * @param excludes the excludes
+     */
     void setExcludes(final String... excludes) {
         this.excludes = excludes == null ? null : Arrays.copyOf(excludes, excludes.length);
     }
 
+    /**
+     * Sets the includes.
+     *
+     * @param includes the includes
+     */
     void setIncludes(final String... includes) {
         this.includes = includes == null ? null : Arrays.copyOf(includes, includes.length);
     }
 
+    /**
+     * Sets the skip.
+     *
+     * @param skip the skip
+     */
     void setSkip(final boolean skip) {
         this.skip = skip;
     }
 
+    /**
+     * Sets the skip target folder.
+     *
+     * @param skipTargetFolder the skip target folder
+     */
     void setSkipTargetFolder(final boolean skipTargetFolder) {
         this.skipTargetFolder = skipTargetFolder;
     }
 
+    /**
+     * Sets the target directory.
+     *
+     * @param targetDirectory the target directory
+     */
     void setTargetDirectory(final File targetDirectory) {
         this.targetDirectory = targetDirectory;
     }
 
+    /**
+     * Build formatter.
+     *
+     * @return the xml output format
+     */
     private XmlOutputFormat buildFormatter() {
         final XmlOutputFormat fmt = new XmlOutputFormat();
         fmt.setAttributeQuoteCharacter(attributeQuoteChar);
@@ -285,10 +320,20 @@ public abstract class AbstractXmlPlugin extends AbstractMojo {
         return fmt;
     }
 
+    /**
+     * Determine line separator.
+     *
+     * @return the string
+     */
     private String determineLineSeparator() {
         return "\n".equals(lineSeparator) ? lineEnding.getChars() : lineSeparator;
     }
 
+    /**
+     * Find.
+     *
+     * @return the string[]
+     */
     private String[] find() {
         final DirectoryScanner dirScanner = new DirectoryScanner();
         dirScanner.setBasedir(baseDirectory);
@@ -305,12 +350,18 @@ public abstract class AbstractXmlPlugin extends AbstractMojo {
         return dirScanner.getIncludedFiles();
     }
 
+    /**
+     * Initialize excludes.
+     */
     private void initializeExcludes() {
         if (excludes == null || excludes.length == 0) {
             excludes = new String[0];
         }
     }
 
+    /**
+     * Initialize includes.
+     */
     private void initializeIncludes() {
         if (includes == null || includes.length == 0) {
             includes = new String[] { "**/*.xml" };

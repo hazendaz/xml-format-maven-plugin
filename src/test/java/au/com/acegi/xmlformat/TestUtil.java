@@ -28,9 +28,18 @@ import java.nio.file.Files;
  */
 final class TestUtil {
 
+    /**
+     * Instantiates a new test util.
+     */
     private TestUtil() {
     }
 
+    /**
+     * File to string.
+     *
+     * @param in the in
+     * @return the string
+     */
     static String fileToString(final File in) {
         try (InputStream is = Files.newInputStream(in.toPath())) {
             return streamToString(is);
@@ -39,12 +48,24 @@ final class TestUtil {
         }
     }
 
+    /**
+     * Get resource.
+     *
+     * @param resource the resource
+     * @return the input stream
+     */
     static InputStream getResource(final String resource) {
         final InputStream in = FormatUtilTest.class.getResourceAsStream(resource);
         assertThat(resource + " not found", in, not(nullValue()));
         return in;
     }
 
+    /**
+     * Stream to string.
+     *
+     * @param in the in
+     * @return the string
+     */
     static String streamToString(final InputStream in) {
         final StringWriter sw = new StringWriter();
         final InputStreamReader reader = new InputStreamReader(in, UTF_8);
@@ -60,6 +81,12 @@ final class TestUtil {
         return sw.toString();
     }
 
+    /**
+     * String to file.
+     *
+     * @param msg the msg
+     * @param out the out
+     */
     static void stringToFile(final String msg, final File out) {
         try (OutputStream fos = Files.newOutputStream(out.toPath());
                 Writer writer = new OutputStreamWriter(fos, UTF_8)) {

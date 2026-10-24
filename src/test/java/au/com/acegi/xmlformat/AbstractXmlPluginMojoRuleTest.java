@@ -33,9 +33,12 @@ import org.junit.jupiter.api.io.TempDir;
  */
 class AbstractXmlPluginTest {
 
+    /** The unformatted xml. */
     private static final String UNFORMATTED_XML = "<root>  <child/>  </root>";
+    /** The include all xml. */
     private static final String INCLUDE_ALL_XML = "**/*.xml";
 
+    /** The tmp. */
     @TempDir
     private File tmp;
 
@@ -43,11 +46,17 @@ class AbstractXmlPluginTest {
     // Mojo instantiation
     // -------------------------------------------------------------------------
 
+    /**
+     * Xml format mojo can be instantiated.
+     */
     @Test
     void xmlFormatMojoCanBeInstantiated() {
         assertThat(new XmlFormatPlugin(), notNullValue());
     }
 
+    /**
+     * Xml check mojo can be instantiated.
+     */
     @Test
     void xmlCheckMojoCanBeInstantiated() {
         assertThat(new XmlCheckPlugin(), notNullValue());
@@ -57,6 +66,11 @@ class AbstractXmlPluginTest {
     // xml-format goal — parameter variations
     // -------------------------------------------------------------------------
 
+    /**
+     * Xml format with default settings.
+     *
+     * @throws Exception the exception
+     */
     @Test
     void xmlFormatWithDefaultSettings() throws Exception {
         final File proj = createProjectDir("default");
@@ -70,6 +84,11 @@ class AbstractXmlPluginTest {
         assertThat(formatted, containsString("\n"));
     }
 
+    /**
+     * Xml format with tab indent.
+     *
+     * @throws Exception the exception
+     */
     @Test
     void xmlFormatWithTabIndent() throws Exception {
         final File proj = createProjectDir("tabindent");
@@ -84,6 +103,11 @@ class AbstractXmlPluginTest {
         assertThat(formatted, containsString("\t"));
     }
 
+    /**
+     * Xml format with crlf line ending.
+     *
+     * @throws Exception the exception
+     */
     @Test
     void xmlFormatWithCrlfLineEnding() throws Exception {
         final File proj = createProjectDir("crlf");
@@ -98,6 +122,11 @@ class AbstractXmlPluginTest {
         assertThat(formatted, containsString("\r\n"));
     }
 
+    /**
+     * Xml format with cr line ending.
+     *
+     * @throws Exception the exception
+     */
     @Test
     void xmlFormatWithCrLineEnding() throws Exception {
         final File proj = createProjectDir("cr");
@@ -112,6 +141,11 @@ class AbstractXmlPluginTest {
         assertThat(formatted, containsString("\r"));
     }
 
+    /**
+     * Xml format with keep blank lines.
+     *
+     * @throws Exception the exception
+     */
     @Test
     void xmlFormatWithKeepBlankLines() throws Exception {
         final File proj = createProjectDir("keepblanklines");
@@ -127,6 +161,11 @@ class AbstractXmlPluginTest {
         assertThat(formatted, containsString("\n\n"));
     }
 
+    /**
+     * Xml format with expand empty elements.
+     *
+     * @throws Exception the exception
+     */
     @Test
     void xmlFormatWithExpandEmptyElements() throws Exception {
         final File proj = createProjectDir("expand");
@@ -141,6 +180,11 @@ class AbstractXmlPluginTest {
         assertThat(formatted, containsString("<child></child>"));
     }
 
+    /**
+     * Xml format with custom indent size.
+     *
+     * @throws Exception the exception
+     */
     @Test
     void xmlFormatWithCustomIndentSize() throws Exception {
         final File proj = createProjectDir("indent4");
@@ -155,6 +199,11 @@ class AbstractXmlPluginTest {
         assertThat(formatted, containsString("    <child"));
     }
 
+    /**
+     * Xml format skip does not modify files.
+     *
+     * @throws Exception the exception
+     */
     @Test
     void xmlFormatSkipDoesNotModifyFiles() throws Exception {
         final File proj = createProjectDir("skip-format");
@@ -168,6 +217,11 @@ class AbstractXmlPluginTest {
         assertThat(fileToString(proj.toPath().resolve("sample.xml").toFile()), is(UNFORMATTED_XML));
     }
 
+    /**
+     * Xml format empty file is ignored.
+     *
+     * @throws Exception the exception
+     */
     @Test
     void xmlFormatEmptyFileIsIgnored() throws Exception {
         final File proj = createProjectDir("empty");
@@ -180,6 +234,11 @@ class AbstractXmlPluginTest {
         assertThat(fileToString(proj.toPath().resolve("empty.xml").toFile()), is(""));
     }
 
+    /**
+     * Xml format with suppressed declaration.
+     *
+     * @throws Exception the exception
+     */
     @Test
     void xmlFormatWithSuppressedDeclaration() throws Exception {
         final File proj = createProjectDir("suppress");
@@ -194,6 +253,11 @@ class AbstractXmlPluginTest {
         assertThat(formatted.contains("<?xml"), is(false));
     }
 
+    /**
+     * Xml format with omit encoding.
+     *
+     * @throws Exception the exception
+     */
     @Test
     void xmlFormatWithOmitEncoding() throws Exception {
         final File proj = createProjectDir("omit-encoding");
@@ -213,6 +277,11 @@ class AbstractXmlPluginTest {
     // xml-check goal variations
     // -------------------------------------------------------------------------
 
+    /**
+     * Xml check skip does not fail on unformatted files.
+     *
+     * @throws Exception the exception
+     */
     @Test
     void xmlCheckSkipDoesNotFailOnUnformattedFiles() throws Exception {
         final File proj = createProjectDir("skip-check");
@@ -224,6 +293,11 @@ class AbstractXmlPluginTest {
         mojo.execute();
     }
 
+    /**
+     * Xml check passes on already formatted file.
+     *
+     * @throws Exception the exception
+     */
     @Test
     void xmlCheckPassesOnAlreadyFormattedFile() throws Exception {
         final File proj = createProjectDir("check-pass");
@@ -237,6 +311,11 @@ class AbstractXmlPluginTest {
         configureMojo(new XmlCheckPlugin(), proj, target).execute();
     }
 
+    /**
+     * Xml check fails on unformatted file.
+     *
+     * @throws Exception the exception
+     */
     @Test
     void xmlCheckFailsOnUnformattedFile() throws Exception {
         final File proj = createProjectDir("check-fail");
@@ -251,6 +330,13 @@ class AbstractXmlPluginTest {
     // Helpers
     // -------------------------------------------------------------------------
 
+    /**
+     * Create project dir.
+     *
+     * @param name the name
+     * @return the file
+     * @throws IOException the io exception
+     */
     private File createProjectDir(final String name) throws IOException {
         final File proj = tmp.toPath().resolve(name).toFile();
         if (!proj.mkdirs()) {
@@ -259,6 +345,13 @@ class AbstractXmlPluginTest {
         return proj;
     }
 
+    /**
+     * Create target dir.
+     *
+     * @param proj the proj
+     * @return the file
+     * @throws IOException the io exception
+     */
     private File createTargetDir(final File proj) throws IOException {
         final File target = proj.toPath().resolve("target").toFile();
         if (!target.mkdirs()) {
@@ -267,6 +360,13 @@ class AbstractXmlPluginTest {
         return target;
     }
 
+    /**
+     * Write xml file.
+     *
+     * @param dir the dir
+     * @param filename the filename
+     * @param content the content
+     */
     private void writeXmlFile(final File dir, final String filename, final String content) {
         stringToFile(content, dir.toPath().resolve(filename).toFile());
     }
@@ -274,6 +374,12 @@ class AbstractXmlPluginTest {
     /**
      * Applies the mandatory parameters to any {@link AbstractXmlPlugin} mojo via package-private setters.
      * Also sets {@code @Parameter} fields whose Maven defaults differ from their Java field defaults.
+     
+     * @param mojo the mojo
+     * @param baseDir the base dir
+     * @param targetDir the target dir
+     * @return the t
+     * @throws ReflectiveOperationException the reflective operation exception
      */
     private <T extends AbstractXmlPlugin> T configureMojo(
             final T mojo, final File baseDir, final File targetDir) throws ReflectiveOperationException {
@@ -291,6 +397,11 @@ class AbstractXmlPluginTest {
 
     /**
      * Sets a field value using reflection, including private fields declared by a superclass.
+     
+     * @param target the target
+     * @param fieldName the field name
+     * @param value the value
+     * @throws ReflectiveOperationException the reflective operation exception
      */
     private void setFieldValue(final Object target, final String fieldName, final Object value)
             throws ReflectiveOperationException {

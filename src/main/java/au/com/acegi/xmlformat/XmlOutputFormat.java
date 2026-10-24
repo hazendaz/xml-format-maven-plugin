@@ -18,6 +18,7 @@ import org.dom4j.io.OutputFormat;
  */
 public class XmlOutputFormat extends OutputFormat {
 
+    /** The keep blank lines. */
     private boolean keepBlankLines;
 
     /**
