@@ -104,8 +104,7 @@ public class XmlCheckPluginTest {
     void pluginReportsError() throws MojoExecutionException {
         final XmlCheckPlugin plugin = new XmlCheckPlugin();
         plugin.setLog(log);
-        when(log.isDebugEnabled()).thenReturn(true);
-        when(log.isErrorEnabled()).thenReturn(true);
+        setupLogIsDebugEnabledAndIsErrorEnabledStubs();
 
         plugin.setBaseDirectory(proj);
         plugin.setIncludes("**/*.xml");
@@ -131,8 +130,7 @@ public class XmlCheckPluginTest {
     void pluginReportsFormattingNeeded() throws MojoFailureException {
         final XmlCheckPlugin plugin = new XmlCheckPlugin();
         plugin.setLog(log);
-        when(log.isDebugEnabled()).thenReturn(true);
-        when(log.isErrorEnabled()).thenReturn(true);
+        setupLogIsDebugEnabledAndIsErrorEnabledStubs();
 
         plugin.setBaseDirectory(proj);
         plugin.setExcludes("**/" + ERR_FILE_NAME);
@@ -159,8 +157,7 @@ public class XmlCheckPluginTest {
     void pluginSucceedsWhenAllFormatted() throws MojoExecutionException, MojoFailureException {
         final XmlCheckPlugin plugin = new XmlCheckPlugin();
         plugin.setLog(log);
-        when(log.isDebugEnabled()).thenReturn(true);
-        when(log.isErrorEnabled()).thenReturn(true);
+        setupLogIsDebugEnabledAndIsErrorEnabledStubs();
 
         plugin.setBaseDirectory(proj);
         plugin.setExcludes("**/" + ERR_FILE_NAME, "**/" + TO_CHG_FILE_NAME);
@@ -214,5 +211,10 @@ public class XmlCheckPluginTest {
             throw new IOException("Couldn't create folders " + root);
         }
         return result;
+    }
+
+    private void setupLogIsDebugEnabledAndIsErrorEnabledStubs() {
+        when(log.isDebugEnabled()).thenReturn(true);
+        when(log.isErrorEnabled()).thenReturn(true);
     }
 }
