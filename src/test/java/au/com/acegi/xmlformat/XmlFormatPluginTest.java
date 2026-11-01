@@ -110,8 +110,7 @@ public class XmlFormatPluginTest {
     void pluginExcludesError() throws MojoExecutionException, MojoFailureException {
         final XmlFormatPlugin plugin = new XmlFormatPlugin();
         plugin.setLog(log);
-        when(log.isDebugEnabled()).thenReturn(true);
-        when(log.isErrorEnabled()).thenReturn(true);
+        setupLogIsDebugEnabledAndIsErrorEnabledStubs(true);
 
         plugin.setBaseDirectory(proj);
         plugin.setExcludes("**/" + ERR_FILE_NAME);
@@ -139,8 +138,7 @@ public class XmlFormatPluginTest {
     void pluginReportsError() throws MojoExecutionException {
         final XmlFormatPlugin plugin = new XmlFormatPlugin();
         plugin.setLog(log);
-        when(log.isDebugEnabled()).thenReturn(false);
-        when(log.isErrorEnabled()).thenReturn(true);
+        setupLogIsDebugEnabledAndIsErrorEnabledStubs(false);
 
         plugin.setBaseDirectory(proj);
         plugin.setExcludes("");
@@ -174,8 +172,7 @@ public class XmlFormatPluginTest {
         plugin.setLog(log);
 
         plugin.setSkipTargetFolder(false);
-        when(log.isDebugEnabled()).thenReturn(true);
-        when(log.isErrorEnabled()).thenReturn(true);
+        setupLogIsDebugEnabledAndIsErrorEnabledStubs(true);
 
         plugin.setBaseDirectory(proj);
         plugin.setExcludes("**/" + ERR_FILE_NAME);
@@ -200,9 +197,8 @@ public class XmlFormatPluginTest {
         final XmlFormatPlugin plugin = new XmlFormatPlugin();
         plugin.setLog(log);
         plugin.setSkip(true);
-        when(log.isDebugEnabled()).thenReturn(true);
+        setupLogIsDebugEnabledAndIsErrorEnabledStubs(true);
         when(log.isInfoEnabled()).thenReturn(true);
-        when(log.isErrorEnabled()).thenReturn(true);
 
         plugin.setBaseDirectory(proj);
         plugin.setExcludes("**/" + ERR_FILE_NAME);
@@ -231,5 +227,10 @@ public class XmlFormatPluginTest {
             throw new IOException("Couldn't create folders " + root);
         }
         return result;
+    }
+
+    private void setupLogIsDebugEnabledAndIsErrorEnabledStubs(boolean isDebugEnabledReturnValue) {
+        when(log.isDebugEnabled()).thenReturn(isDebugEnabledReturnValue);
+        when(log.isErrorEnabled()).thenReturn(true);
     }
 }
